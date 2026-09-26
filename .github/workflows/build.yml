@@ -29,11 +29,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build with Gradle
+      - name: Clean and Build with Gradle
         run: |
           cd android
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew clean assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
