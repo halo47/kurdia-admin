@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0d10">
-<title>KURDIA ADMIN - Smart Website Builder</title>
+<title>KURDIA ADMIN - Smart Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,7 +22,6 @@
   --accent-hover:#b3223b;
   --success:#22c55e;
   --danger:#ef4444;
-  --warning:#f59e0b;
 }
 
 body{
@@ -42,14 +41,14 @@ button{cursor:pointer;border:0;outline:none}
 
 /* HEADER */
 .topbar{
-  height:64px;
-  background:rgba(17,23,34,0.92);
+  height:60px;
+  background:rgba(17,23,34,0.95);
   backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 16px;
+  padding:0 12px;
   z-index:30;
   flex-shrink:0;
 }
@@ -57,192 +56,157 @@ button{cursor:pointer;border:0;outline:none}
 .brand{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
 }
 .brand .logo{
-  width:36px;
-  height:36px;
-  border-radius:10px;
+  width:34px;
+  height:34px;
+  border-radius:9px;
   background:linear-gradient(135deg,var(--accent),#500e19);
   display:grid;
   place-items:center;
   font-weight:900;
-  font-size:16px;
+  font-size:15px;
 }
 .brand h1{
-  font-size:15px;
+  font-size:14px;
   margin:0;
   font-weight:800;
-}
-.brand small{
-  color:var(--muted);
-  font-size:11px;
-  display:block;
 }
 
 .actions{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 
 .btn{
-  padding:8px 12px;
-  border-radius:9px;
+  padding:7px 10px;
+  border-radius:8px;
   background:var(--panel2);
   color:#fff;
   border:1px solid var(--border);
-  font-size:12px;
+  font-size:11px;
   display:inline-flex;
   align-items:center;
-  gap:6px;
+  gap:5px;
   transition:.2s;
 }
-.btn:hover{background:#232d3d}
 .btn-primary{background:var(--accent);border-color:var(--accent)}
 .btn-primary:hover{background:var(--accent-hover)}
-.btn-success{background:#123026;border-color:#205842;color:#8ff0bd}
-.btn-danger{background:#35131b;border-color:#63202d;color:#ff9baa}
 
-/* MAIN LAYOUT */
-.builder{
+/* MAIN TABS CONTENT */
+.tab-content{
   flex:1;
-  display:grid;
-  grid-template-columns:290px minmax(0,1fr) 340px;
-  min-height:0;
+  overflow-y:auto;
+  display:none;
+  padding:16px;
 }
-
-/* SIDEBAR: SECTIONS */
-.sections-pane{
-  background:var(--panel);
-  border-left:1px solid var(--border);
+.tab-content.active{
   display:flex;
   flex-direction:column;
-  overflow:hidden;
 }
 
+/* SECTIONS TAB */
 .pane-title{
-  padding:14px 16px;
-  border-bottom:1px solid var(--border);
-  font-size:13px;
+  font-size:14px;
   font-weight:700;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  margin-bottom:12px;
 }
 
 .section-list{
-  padding:12px;
-  overflow-y:auto;
-  flex:1;
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
+  flex:1;
 }
 
 .sec-card{
-  background:var(--bg);
+  background:var(--panel);
   border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px 12px;
+  border-radius:12px;
+  padding:12px 14px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  cursor:grab;
   transition:.2s;
 }
-.sec-card:hover{border-color:#3a475c}
-.sec-card.active{border-color:var(--accent);background:rgba(157,28,50,0.12)}
+.sec-card.active{border-color:var(--accent);background:rgba(157,28,50,0.14)}
 .sec-card.hidden-sec{opacity:0.45}
 
 .sec-card-info{
   display:flex;
   align-items:center;
-  gap:9px;
+  gap:12px;
 }
-.drag-handle{color:var(--muted);font-size:14px}
+.drag-handle{color:var(--muted);font-size:16px;cursor:grab}
 .sec-card-name{font-size:13px;font-weight:600}
-.sec-card-type{font-size:10px;color:var(--muted);display:block}
+.sec-card-type{font-size:11px;color:var(--muted);display:block}
 
-.sec-card-btns{display:flex;gap:4px}
+.sec-card-btns{display:flex;gap:6px}
 .icon-btn{
-  width:28px;
-  height:28px;
-  border-radius:7px;
+  width:32px;
+  height:32px;
+  border-radius:8px;
   background:var(--panel2);
   color:#ccc;
   display:grid;
   place-items:center;
-  font-size:11px;
+  font-size:12px;
 }
-.icon-btn:hover{background:#2a3649;color:#fff}
 
-/* CANVAS & PREVIEW */
-.canvas-pane{
+/* PREVIEW TAB */
+#tab-preview{
+  padding:10px;
+  align-items:center;
   background:#05070a;
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-  position:relative;
 }
-
 .viewport-bar{
-  height:44px;
-  border-bottom:1px solid var(--border);
+  height:40px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:6px;
-  background:rgba(10,14,20,0.7);
+  gap:8px;
+  margin-bottom:10px;
+  width:100%;
 }
-
 .view-btn{
   padding:5px 12px;
   border-radius:7px;
-  background:transparent;
+  background:var(--panel);
   color:var(--muted);
-  font-size:12px;
-}
-.view-btn.active{
-  background:var(--panel2);
-  color:#fff;
+  font-size:11px;
   border:1px solid var(--border);
 }
-
-.preview-container{
-  flex:1;
-  overflow:auto;
-  display:flex;
-  justify-content:center;
-  padding:20px;
+.view-btn.active{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
 }
 
 .site-frame{
   background:#080b12;
-  border-radius:18px;
-  box-shadow:0 15px 50px rgba(0,0,0,0.6);
+  border-radius:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
   border:1px solid var(--border);
   width:100%;
-  max-width:980px;
+  max-width:420px;
   overflow-y:auto;
-  transition:max-width .3s ease;
-  position:relative;
+  flex:1;
 }
-.site-frame.tablet{max-width:768px}
-.site-frame.mobile{max-width:390px;border-radius:24px}
 
-/* LIVE PREVIEW COMPONENTS */
 .live-sec{
-  position:relative;
   outline:2px solid transparent;
   transition:.15s;
   cursor:pointer;
 }
-.live-sec:hover{outline:2px dashed rgba(157,28,50,0.6)}
 .live-sec.selected{outline:2px solid var(--accent)}
 
 .live-hero{
-  padding:60px 24px;
+  padding:45px 18px;
   color:#fff;
   background-size:cover;
   background-position:center;
@@ -255,99 +219,82 @@ button{cursor:pointer;border:0;outline:none}
   padding:4px 10px;
   border-radius:99px;
   font-size:11px;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
-.live-hero h2{font-size:32px;margin:0 0 10px;line-height:1.3}
-.live-hero p{color:#d1d5db;font-size:14px;margin:0;line-height:1.7}
+.live-hero h2{font-size:24px;margin:0 0 8px;line-height:1.3}
+.live-hero p{color:#d1d5db;font-size:13px;margin:0;line-height:1.6}
 
 .live-trip{
-  padding:30px 24px;
+  padding:24px 18px;
   background:rgba(22,30,43,0.6);
   border-top:1px solid var(--border);
   border-bottom:1px solid var(--border);
 }
 .trip-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:10px;
-  margin-top:15px;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
 }
 .trip-box{
   background:var(--bg);
-  padding:10px;
-  border-radius:9px;
+  padding:8px 10px;
+  border-radius:8px;
   border:1px solid var(--border);
 }
-.trip-box span{font-size:11px;color:var(--muted);display:block}
-.trip-box b{font-size:13px}
+.trip-box span{font-size:10px;color:var(--muted);display:block}
+.trip-box b{font-size:12px}
 
-.live-steps{
-  padding:30px 24px;
-}
+.live-steps{padding:24px 18px}
 .step-item{
   display:flex;
-  gap:12px;
-  margin-bottom:12px;
+  gap:10px;
+  margin-bottom:10px;
   background:var(--panel2);
-  padding:10px 14px;
-  border-radius:10px;
+  padding:8px 12px;
+  border-radius:8px;
   border:1px solid var(--border);
+  font-size:12px;
 }
 .step-num{
   background:var(--accent);
-  width:26px;
-  height:26px;
+  width:22px;
+  height:22px;
   border-radius:50%;
   display:grid;
   place-items:center;
-  font-size:12px;
+  font-size:11px;
   font-weight:700;
   flex-shrink:0;
 }
 
 .live-booking{
-  padding:30px 24px;
+  padding:24px 18px;
   text-align:center;
-  background:linear-gradient(180deg,transparent,rgba(157,28,50,0.15));
+  background:linear-gradient(180deg,transparent,rgba(157,28,50,0.12));
 }
 
-/* INSPECTOR PANE */
-.inspector-pane{
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.inspector-body{
-  padding:16px;
-  overflow-y:auto;
-  flex:1;
-}
-
-.form-group{
-  margin-bottom:14px;
-}
+/* INSPECTOR TAB */
+.form-group{margin-bottom:14px}
 .form-group label{
   display:block;
-  font-size:11px;
+  font-size:12px;
   color:var(--muted);
   margin-bottom:6px;
   font-weight:600;
 }
 .input, .textarea, .select{
   width:100%;
-  background:#090d14;
+  background:#0d121c;
   border:1px solid var(--border);
   color:#fff;
-  border-radius:8px;
-  padding:9px 12px;
-  font-size:12px;
+  border-radius:9px;
+  padding:10px 12px;
+  font-size:13px;
   outline:none;
 }
 .input:focus, .textarea:focus{border-color:var(--accent)}
-.textarea{min-height:75px;resize:vertical}
+.textarea{min-height:80px;resize:vertical}
 
 .color-pair{
   display:grid;
@@ -358,13 +305,13 @@ button{cursor:pointer;border:0;outline:none}
   display:flex;
   align-items:center;
   gap:8px;
-  background:#090d14;
-  padding:6px;
-  border-radius:8px;
+  background:#0d121c;
+  padding:8px;
+  border-radius:9px;
   border:1px solid var(--border);
 }
 .color-ctrl input[type=color]{
-  width:32px;
+  width:34px;
   height:30px;
   border:0;
   border-radius:6px;
@@ -372,16 +319,39 @@ button{cursor:pointer;border:0;outline:none}
   cursor:pointer;
 }
 
-.upload-ctrl{
-  display:flex;
-  gap:6px;
+/* BOTTOM NAVIGATION (MOBILE FIRST) */
+.bottom-nav{
+  height:58px;
+  background:rgba(17,23,34,0.98);
+  border-top:1px solid var(--border);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  flex-shrink:0;
+  z-index:30;
 }
+.nav-tab{
+  background:transparent;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:11px;
+}
+.nav-tab.active{
+  color:white;
+  background:rgba(157,28,50,0.12);
+  box-shadow:inset 0 3px 0 var(--accent);
+}
+.nav-tab-icon{font-size:16px}
 
 /* TOAST */
 .toast{
   position:fixed;
-  bottom:20px;
-  left:20px;
+  bottom:70px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
   background:#17202d;
   color:#fff;
   border:1px solid var(--border);
@@ -389,18 +359,12 @@ button{cursor:pointer;border:0;outline:none}
   border-radius:10px;
   font-size:12px;
   box-shadow:0 10px 30px rgba(0,0,0,0.5);
-  transform:translateY(80px);
   opacity:0;
   transition:.25s ease;
   z-index:9999;
+  white-space:nowrap;
 }
-.toast.show{transform:translateY(0);opacity:1}
-
-@media(max-width:900px){
-  .builder{grid-template-columns:1fr;overflow:auto}
-  .sections-pane, .inspector-pane{height:auto;border:0}
-  .site-frame{max-width:100% !important}
-}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
@@ -410,59 +374,63 @@ button{cursor:pointer;border:0;outline:none}
     <div class="logo">K</div>
     <div>
       <h1>KURDIA ADMIN</h1>
-      <small>Smart Website Builder</small>
     </div>
   </div>
 
   <div class="actions">
-    <button class="btn" id="undoBtn">↶ Undo</button>
-    <button class="btn" id="redoBtn">↷ Redo</button>
-    <button class="btn" id="saveDraftBtn">💾 Save Draft</button>
+    <button class="btn" id="undoBtn">↶</button>
+    <button class="btn" id="redoBtn">↷</button>
+    <button class="btn" id="saveDraftBtn">💾 پاشەکەوت</button>
     <button class="btn btn-primary" id="publishBtn">🚀 Publish</button>
   </div>
 </header>
 
-<main class="builder">
-  <!-- 1. SECTIONS LIST -->
-  <aside class="sections-pane">
-    <div class="pane-title">
-      <span>بەشەکانی وێبسایت</span>
-      <span id="secCounter" style="color:var(--accent)">4</span>
-    </div>
-    <div class="section-list" id="sectionList"></div>
-    <div style="padding:10px 12px;border-top:1px solid var(--border)">
-      <button class="btn btn-primary" style="width:100%" id="addSectionBtn">＋ زیادکردنی بەش</button>
-    </div>
-  </aside>
-
-  <!-- 2. CANVAS & PREVIEW -->
-  <section class="canvas-pane">
-    <div class="viewport-bar">
-      <button class="view-btn active" data-view="desktop">🖥 Desktop</button>
-      <button class="view-btn" data-view="tablet">▣ Tablet</button>
-      <button class="view-btn" data-view="mobile">📱 Mobile</button>
-    </div>
-    <div class="preview-container">
-      <div class="site-frame" id="siteFrame">
-        <!-- Rendered Sections -->
-        <div id="livePreview"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. INSPECTOR -->
-  <aside class="inspector-pane">
-    <div class="pane-title">
-      <span>دەستکاریکردن (Inspector)</span>
-      <span id="activeSecType" style="color:var(--muted)">هیچ</span>
-    </div>
-    <div class="inspector-body" id="inspectorContent">
-      <div style="text-align:center;color:var(--muted);padding:30px 10px;font-size:12px">
-        بەشێک هەڵبژێرە بۆ دەستکاریکردنی فیلدەکان
-      </div>
-    </div>
-  </aside>
+<!-- TAB 1: SECTIONS -->
+<main class="tab-content active" id="tab-sections">
+  <div class="pane-title">
+    <span>بەشەکانی وێبسایت</span>
+    <span id="secCounter" style="color:var(--accent);font-weight:900">4</span>
+  </div>
+  <div class="section-list" id="sectionList"></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:12px" id="addSectionBtn">＋ زیادکردنی بەش</button>
 </main>
+
+<!-- TAB 2: LIVE PREVIEW -->
+<main class="tab-content" id="tab-preview">
+  <div class="viewport-bar">
+    <button class="view-btn active" data-view="mobile">📱 Mobile</button>
+    <button class="view-btn" data-view="tablet">▣ Tablet</button>
+    <button class="view-btn" data-view="desktop">🖥 Desktop</button>
+  </div>
+  <div class="site-frame" id="siteFrame">
+    <div id="livePreview"></div>
+  </div>
+</main>
+
+<!-- TAB 3: INSPECTOR -->
+<main class="tab-content" id="tab-inspector">
+  <div class="pane-title">
+    <span>دەستکاریکردنی بەش</span>
+    <span id="activeSecType" style="color:var(--accent)">هیچ</span>
+  </div>
+  <div id="inspectorContent"></div>
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="nav-tab active" data-target="tab-sections">
+    <span class="nav-tab-icon">☰</span>
+    بەشەکان
+  </button>
+  <button class="nav-tab" data-target="tab-preview">
+    <span class="nav-tab-icon">👁</span>
+    پێشبینین
+  </button>
+  <button class="nav-tab" data-target="tab-inspector">
+    <span class="nav-tab-icon">⚙</span>
+    دەستکاری
+  </button>
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -510,7 +478,6 @@ const DEFAULT_DATA = {
 let state = loadInitialState();
 let selectedId = state.sections[0]?.id || null;
 
-// History for Undo/Redo
 let historyStack = [JSON.stringify(state)];
 let historyIndex = 0;
 
@@ -555,13 +522,29 @@ function loadInitialState(){
   return structuredClone(DEFAULT_DATA);
 }
 
+// TAB SWITCHING LOGIC
+document.querySelectorAll(".nav-tab").forEach(tab=>{
+  tab.onclick = ()=>{
+    document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.target).classList.add("active");
+  };
+});
+
+function switchToInspector(secId){
+  selectedId = secId;
+  renderAll();
+  document.querySelector('[data-target="tab-inspector"]').click();
+}
+
 function renderAll(){
   renderSectionList();
   renderLivePreview();
   renderInspector();
 }
 
-/* 1. SECTIONS LIST RENDERING & DRAG/DROP */
+/* 1. SECTIONS LIST */
 function renderSectionList(){
   const list = document.getElementById("sectionList");
   list.innerHTML = "";
@@ -571,7 +554,6 @@ function renderSectionList(){
     const el = document.createElement("div");
     el.className = "sec-card " + (sec.id === selectedId ? "active ":"") + (!sec.visible ? "hidden-sec":"");
     el.draggable = true;
-    el.dataset.id = sec.id;
 
     el.innerHTML = `
       <div class="sec-card-info">
@@ -582,16 +564,18 @@ function renderSectionList(){
         </div>
       </div>
       <div class="sec-card-btns">
+        <button class="icon-btn edit-btn" title="دەستکاری">✏️</button>
         <button class="icon-btn vis-btn">${sec.visible ? "◉":"○"}</button>
         <button class="icon-btn del-btn">×</button>
       </div>
     `;
 
-    el.onclick = (e)=>{
-      if(e.target.closest("button")) return;
-      selectedId = sec.id;
-      renderAll();
+    el.querySelector(".edit-btn").onclick = (e)=>{
+      e.stopPropagation();
+      switchToInspector(sec.id);
     };
+
+    el.onclick = ()=> switchToInspector(sec.id);
 
     el.querySelector(".vis-btn").onclick = (e)=>{
       e.stopPropagation();
@@ -609,7 +593,7 @@ function renderSectionList(){
       pushState(updated);
     };
 
-    // Drag events
+    // Drag
     el.ondragstart = (e)=>{ e.dataTransfer.setData("text/plain", sec.id); };
     el.ondragover = (e)=>{ e.preventDefault(); };
     el.ondrop = (e)=>{
@@ -628,7 +612,7 @@ function renderSectionList(){
   });
 }
 
-/* 2. LIVE PREVIEW RENDERING */
+/* 2. LIVE PREVIEW */
 function renderLivePreview(){
   const live = document.getElementById("livePreview");
   live.innerHTML = "";
@@ -636,7 +620,7 @@ function renderLivePreview(){
   state.sections.filter(s => s.visible).forEach(sec => {
     const wrap = document.createElement("div");
     wrap.className = "live-sec " + (sec.id === selectedId ? "selected" : "");
-    wrap.onclick = ()=>{ selectedId = sec.id; renderAll(); };
+    wrap.onclick = ()=> switchToInspector(sec.id);
 
     if(sec.type === "hero"){
       const bgImg = state.heroImageUrl ? `url('${state.heroImageUrl}')` : `none`;
@@ -664,7 +648,7 @@ function renderLivePreview(){
     }else if(sec.type === "services"){
       wrap.innerHTML = `
         <div class="live-steps">
-          <h4 style="margin:0 0 14px">قۆناغ و هەنگاوەکان</h4>
+          <h4 style="margin:0 0 12px">قۆناغەکانی گەشت</h4>
           <div class="step-item"><span class="step-num">1</span><span>${escapeHtml(state.step1)}</span></div>
           <div class="step-item"><span class="step-num">2</span><span>${escapeHtml(state.step2)}</span></div>
           <div class="step-item"><span class="step-num">3</span><span>${escapeHtml(state.step3)}</span></div>
@@ -684,7 +668,6 @@ function renderLivePreview(){
       wrap.innerHTML = `
         <div style="padding:30px 20px;text-align:center;border-bottom:1px solid var(--border)">
           <h3>${escapeHtml(sec.title || sec.type)}</h3>
-          <p style="color:var(--muted)">بەشی نوێ</p>
         </div>
       `;
     }
@@ -692,17 +675,17 @@ function renderLivePreview(){
   });
 }
 
-/* 3. INSPECTOR RENDERING */
+/* 3. INSPECTOR */
 function renderInspector(){
   const body = document.getElementById("inspectorContent");
   const sec = state.sections.find(s => s.id === selectedId);
   if(!sec){
-    body.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px 10px;">بەشێک هەڵبژێرە</div>`;
+    body.innerHTML = `<div style="text-align:center;color:var(--muted);padding:40px 10px;">بەشێک لە تابەکانی پێشوو هەڵبژێرە</div>`;
     document.getElementById("activeSecType").textContent = "هیچ";
     return;
   }
 
-  document.getElementById("activeSecType").textContent = sec.type;
+  document.getElementById("activeSecType").textContent = sec.title || sec.type;
   let html = `
     <div class="form-group">
       <label>ناوی بەش لە پێڕست</label>
@@ -713,29 +696,20 @@ function renderInspector(){
   if(sec.type === "hero"){
     html += `
       <div class="form-group">
-        <label>ڕەنگەکانی Gradient</label>
+        <label>ڕەنگەکانی تێکەڵاو (Gradient)</label>
         <div class="color-pair">
-          <div class="color-ctrl"><input type="color" id="inp_c1" value="${state.gradColor1}"><span>Color 1</span></div>
-          <div class="color-ctrl"><input type="color" id="inp_c2" value="${state.gradColor2}"><span>Color 2</span></div>
+          <div class="color-ctrl"><input type="color" id="inp_c1" value="${state.gradColor1}"><span>ڕەنگی سەرەکی</span></div>
+          <div class="color-ctrl"><input type="color" id="inp_c2" value="${state.gradColor2}"><span>ڕەنگی ژێرەوە</span></div>
         </div>
       </div>
-      <div class="form-group">
-        <label>Hero Badge</label>
-        <input class="input" id="inp_heroBadge" value="${escapeAttr(state.heroBadge)}">
-      </div>
-      <div class="form-group">
-        <label>ناونیشانی سەرەکی (Hero Title)</label>
-        <input class="input" id="inp_heroTitle" value="${escapeAttr(state.heroTitle)}">
-      </div>
-      <div class="form-group">
-        <label>سەردێڕی دووەم (Subtitle)</label>
-        <textarea class="textarea" id="inp_heroSubtitle">${escapeHtml(state.heroSubtitle)}</textarea>
-      </div>
+      <div class="form-group"><label>Hero Badge</label><input class="input" id="inp_heroBadge" value="${escapeAttr(state.heroBadge)}"></div>
+      <div class="form-group"><label>سەردێڕی سەرەکی (Hero Title)</label><input class="input" id="inp_heroTitle" value="${escapeAttr(state.heroTitle)}"></div>
+      <div class="form-group"><label>دەقی لاوەکی (Subtitle)</label><textarea class="textarea" id="inp_heroSubtitle">${escapeHtml(state.heroSubtitle)}</textarea></div>
       <div class="form-group">
         <label>وێنەی پێشەوە (Hero Image)</label>
-        <div class="upload-ctrl">
-          <input class="input" id="inp_heroImageUrl" value="${escapeAttr(state.heroImageUrl)}" placeholder="URL">
-          <button class="btn" id="uploadHeroImgBtn">📷</button>
+        <div style="display:flex;gap:6px">
+          <input class="input" id="inp_heroImageUrl" value="${escapeAttr(state.heroImageUrl)}" placeholder="لینکی وێنە">
+          <button class="btn" id="uploadHeroImgBtn" style="padding:0 14px">📷 بارکردن</button>
           <input type="file" id="heroFileInput" accept="image/*" hidden>
         </div>
       </div>
@@ -748,7 +722,7 @@ function renderInspector(){
       <div class="form-group"><label>ماوە</label><input class="input" id="inp_tripDur" value="${escapeAttr(state.tripDuration)}"></div>
       <div class="form-group"><label>کاتژمێر</label><input class="input" id="inp_tripTime" value="${escapeAttr(state.tripTime)}"></div>
       <div class="form-group"><label>شوێن</label><input class="input" id="inp_tripLoc" value="${escapeAttr(state.tripLocation)}"></div>
-      <div class="form-group"><label>دەربارەی گەشت (تێبینی)</label><textarea class="textarea" id="inp_tripDesc">${escapeHtml(state.tripDesc)}</textarea></div>
+      <div class="form-group"><label>دەربارەی گەشت</label><textarea class="textarea" id="inp_tripDesc">${escapeHtml(state.tripDesc)}</textarea></div>
     `;
   }else if(sec.type === "services"){
     html += `
@@ -769,10 +743,9 @@ function renderInspector(){
     `;
   }
 
-  html += `<button class="btn btn-primary" style="width:100%;margin-top:10px" id="applyInspectorBtn">✓ نوێکردنەوە لە Preview</button>`;
+  html += `<button class="btn btn-primary" style="width:100%;margin-top:14px;padding:12px" id="applyInspectorBtn">✓ جێبەجێکردن لە Preview</button>`;
   body.innerHTML = html;
 
-  // Event handlers
   document.getElementById("applyInspectorBtn").onclick = ()=>{
     const updated = structuredClone(state);
     const targetSec = updated.sections.find(s=>s.id === selectedId);
@@ -803,10 +776,10 @@ function renderInspector(){
     }
 
     pushState(updated);
-    toast("دەستکارییەکان جێبەجێ کران ✓");
+    toast("دەستکارییەکان پاشەکەوت کران ✓");
+    document.querySelector('[data-target="tab-preview"]').click();
   };
 
-  // Image Upload handler
   const upBtn = document.getElementById("uploadHeroImgBtn");
   if(upBtn){
     const fileInp = document.getElementById("heroFileInput");
@@ -822,43 +795,43 @@ function renderInspector(){
         const data = await res.json();
         if(data.success){
           document.getElementById("inp_heroImageUrl").value = data.data.url;
-          toast("وێنەکە سەرکەوتووانە بارکرا ✓");
+          toast("وێنەکە بارکرا ✓");
         }else toast("هەڵە لە بارکردنی وێنە");
       }catch(err){ toast("کێشەی پەیوەندی هەیە"); }
     };
   }
 }
 
-/* 4. ADD NEW SECTION */
+/* ADD SECTION */
 document.getElementById("addSectionBtn").onclick = ()=>{
   const newId = "sec_" + Date.now();
   const updated = structuredClone(state);
   updated.sections.push({ id: newId, type: "custom", title: "بەشی نوێ", visible: true });
-  selectedId = newId;
+  switchToInspector(newId);
   pushState(updated);
   toast("بەشی نوێ زیادکرا");
 };
 
-/* 5. VIEWPORT TOGGLES */
+/* VIEWPORT BUTTONS */
 document.querySelectorAll(".view-btn").forEach(btn => {
   btn.onclick = ()=>{
     document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     const frame = document.getElementById("siteFrame");
-    frame.className = "site-frame " + (btn.dataset.view === "tablet" ? "tablet" : btn.dataset.view === "mobile" ? "mobile" : "");
+    frame.style.maxWidth = btn.dataset.view === "desktop" ? "100%" : (btn.dataset.view === "tablet" ? "768px" : "420px");
   };
 });
 
-/* 6. SAVE DRAFT & PUBLISH (JSONBin & LocalStorage) */
+/* DRAFT & PUBLISH */
 document.getElementById("saveDraftBtn").onclick = ()=>{
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  toast("درافت بە سەرکەوتوویی پاشەکەوت کرا ✓");
+  toast("درافت پاشەکەوت کرا ✓");
 };
 
 document.getElementById("publishBtn").onclick = async ()=>{
   localStorage.setItem(PUBLISHED_KEY, JSON.stringify(state));
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  toast("خەریکی بڵاوکردنەوەیە لە JSONBin...");
+  toast("خەریکی بڵاوکردنەوەیە لە سەر سێرڤەر...");
 
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
@@ -870,16 +843,15 @@ document.getElementById("publishBtn").onclick = async ()=>{
       body: JSON.stringify(state)
     });
     if(res.ok){
-      toast("🚀 وێبسایت بە سەرکەوتوویی بڵاوکرایەوە (Published)");
+      toast("🚀 وێبسایت بە سەرکەوتوویی Publish کرا");
     }else{
-      toast("پاشەکەوت بوو، بەڵام هەڵە لە هەور هەیە!");
+      toast("لە مۆبایل پاشەکەوت بوو، هەڵە لە سێرڤەر!");
     }
   }catch(e){
-    toast("وێبسایت لە ئامێرەکە پاشەکەوت بوو (Offline)");
+    toast("لە مۆبایل پاشەکەوت کرا (ئۆفلاین)");
   }
 };
 
-/* HELPERS */
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
@@ -891,7 +863,6 @@ function toast(msg){
 function escapeHtml(s){ return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 function escapeAttr(s){ return escapeHtml(s); }
 
-// INIT
 renderAll();
 </script>
 </body>
