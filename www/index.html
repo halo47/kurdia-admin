@@ -657,6 +657,7 @@ button{
 
 .media-card-info small{
   color:var(--muted);
+  word-break:break-all;
 }
 
 .upload-box{
@@ -666,6 +667,7 @@ button{
   text-align:center;
   color:var(--muted);
   margin-bottom:15px;
+  cursor:pointer;
 }
 
 /* AI */
@@ -882,8 +884,8 @@ button{
 
     <div class="sidebar-bottom">
       <div class="status">
-        <span class="dot"></span>
-        سیستەم کاردەکات
+        <span class="dot" id="cloudStatusDot"></span>
+        <span id="cloudStatusText">بەستراوە بە Cloud</span>
       </div>
     </div>
 
@@ -934,8 +936,8 @@ button{
 
           <div class="stat">
             <div class="stat-label">دۆخی پڕۆژە</div>
-            <div class="stat-value" style="font-size:21px">Draft</div>
-            <div class="stat-info">Last saved locally</div>
+            <div class="stat-value" id="cloudSyncStatus" style="font-size:21px">Cloud Live</div>
+            <div class="stat-info">JSONBin Database</div>
           </div>
 
           <div class="stat">
@@ -1030,7 +1032,7 @@ button{
         <div class="panel">
 
           <div class="panel-head">
-            <strong>Media Library</strong>
+            <strong>Media Library (ImgBB Cloud)</strong>
             <button class="btn primary" id="uploadBtn">＋ Upload</button>
           </div>
 
@@ -1041,7 +1043,7 @@ button{
             <div class="upload-box" id="uploadBox">
               🖼️
               <br>
-              وێنەکانت لێرە زیاد بکە
+              وێنەکانت لێرە زیاد بکە تا ڕاستەوخۆ بچنە سەر ImgBB
               <br>
               <small>PNG / JPG / WEBP</small>
             </div>
@@ -1121,10 +1123,10 @@ button{
 
           <div class="setting-card">
 
-            <h3>💾 Project</h3>
+            <h3>💾 هەور و داتابەیس</h3>
 
             <p style="color:var(--muted)">
-              داتاکانی Builder لە local storage ـی ئەم ئامێرەدا پاشەکەوت دەکرێن.
+              داتاکان لەگەڵ JSONBin بە شێوەی ئۆنلاین سینک دەبن.
             </p>
 
             <button class="btn danger" id="resetBtn">
@@ -1149,8 +1151,11 @@ button{
 "use strict";
 
 /* =========================
-   DATA
+   KEYS & CLOUD CONFIG
 ========================= */
+const BIN_ID = "6ab7f417ac6210605af863a3";
+const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
+const IMGBB_KEY = "c89b7b9f5eaae43bce82e66b4d3f572a";
 
 const DEFAULT_STATE = {
   sections:[
@@ -1200,14 +1205,14 @@ const DEFAULT_STATE = {
   media:[]
 };
 
-let state = loadState();
+let state = loadLocalState();
 let selectedId = state.sections[0]?.id || null;
 
 /* =========================
-   STORAGE
+   LOCAL & CLOUD STORAGE
 ========================= */
 
-function loadState(){
+function loadLocalState(){
   try{
     const raw=localStorage.getItem("kurdia_admin_state");
     return raw ? JSON.parse(raw) : structuredClone(DEFAULT_STATE);
@@ -1216,10 +1221,52 @@ function loadState(){
   }
 }
 
-function saveState(show=true){
+async function loadFromCloud(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { "X-Master-Key": API_KEY }
+    });
+    if(res.ok){
+      const data = await res.json();
+      if(data.record && data.record.sections){
+        state = data.record;
+        saveLocalState(false);
+        renderBuilder();
+        renderMedia();
+        toast("داتاکان لە هەورەوە هێنران ✓");
+      }
+    }
+  }catch(err){
+    console.log("Cloud load failed, using local", err);
+  }
+}
+
+function saveLocalState(notify=true){
   localStorage.setItem("kurdia_admin_state",JSON.stringify(state));
-  if(show) toast("داتا بە سەرکەوتوویی پاشەکەوت کرا ✓");
+  if(notify) toast("داتا لە مۆبایل پاشەکەوت کرا ✓");
   updateStats();
+}
+
+async function syncToCloud(){
+  toast("خەریکی پاشەکەوتکردنە لە هەور...");
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY
+      },
+      body: JSON.stringify(state)
+    });
+    if(res.ok){
+      toast("داتاکان بە سەرکەوتوویی لە هەور نوێکرانەوە ✓");
+      document.getElementById("cloudSyncStatus").textContent = "Synced";
+    }else{
+      toast("هەڵە لە پاشەکەوتکردنی هەور!");
+    }
+  }catch(e){
+    toast("هەڵە لە پەیوەندی بە ئینتەرنێتەوە");
+  }
 }
 
 /* =========================
@@ -1237,19 +1284,11 @@ const titles={
 document.querySelectorAll(".nav button").forEach(btn=>{
   btn.addEventListener("click",()=>{
     const page=btn.dataset.page;
-
-    document.querySelectorAll(".nav button")
-      .forEach(x=>x.classList.remove("active"));
-
+    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
     btn.classList.add("active");
-
-    document.querySelectorAll(".page")
-      .forEach(x=>x.classList.remove("active"));
-
+    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
     document.getElementById("page-"+page).classList.add("active");
-
     document.getElementById("pageTitle").textContent=titles[page];
-
     document.getElementById("sidebar").classList.remove("open");
 
     if(page==="builder") renderBuilder();
@@ -1277,47 +1316,30 @@ function renderBuilder(){
 }
 
 function renderSectionList(){
-
   const list=document.getElementById("sectionList");
-
   list.innerHTML="";
 
-  state.sections.forEach((section,index)=>{
-
+  state.sections.forEach((section)=>{
     const item=document.createElement("div");
-
-    item.className=
-      "section-item "+
-      (section.id===selectedId ? "selected":"");
-
+    item.className="section-item "+(section.id===selectedId ? "selected":"");
     item.draggable=true;
-
     item.dataset.id=section.id;
 
     item.innerHTML=`
       <span class="drag">☷</span>
-
       <div class="section-info">
         <b>${escapeHtml(section.title || section.type)}</b>
         <small>${section.type}</small>
       </div>
-
       <div class="section-actions">
-
-        <button class="icon-btn visibility">
-          ${section.visible ? "◉":"○"}
-        </button>
-
+        <button class="icon-btn visibility">${section.visible ? "◉":"○"}</button>
         <button class="icon-btn delete">×</button>
-
       </div>
     `;
 
     item.addEventListener("click",e=>{
       if(e.target.closest("button")) return;
-
       selectedId=section.id;
-
       renderSectionList();
       renderPreview();
       renderInspector();
@@ -1326,24 +1348,19 @@ function renderSectionList(){
     item.querySelector(".visibility").onclick=e=>{
       e.stopPropagation();
       section.visible=!section.visible;
-      saveState(false);
+      saveLocalState(false);
       renderBuilder();
     };
 
     item.querySelector(".delete").onclick=e=>{
       e.stopPropagation();
-
       if(state.sections.length<=1){
         toast("دەبێت لانیکەم یەک بەش بمێنێتەوە");
         return;
       }
-
       state.sections=state.sections.filter(x=>x.id!==section.id);
-
-      if(selectedId===section.id)
-        selectedId=state.sections[0]?.id;
-
-      saveState(false);
+      if(selectedId===section.id) selectedId=state.sections[0]?.id;
+      saveLocalState(false);
       renderBuilder();
     };
 
@@ -1357,19 +1374,13 @@ function renderSectionList(){
 
     item.addEventListener("drop",e=>{
       e.preventDefault();
-
       const from=e.dataTransfer.getData("text/plain");
-
       if(!from || from===section.id) return;
-
       const fromIndex=state.sections.findIndex(x=>x.id===from);
       const toIndex=state.sections.findIndex(x=>x.id===section.id);
-
       const [moved]=state.sections.splice(fromIndex,1);
-
       state.sections.splice(toIndex,0,moved);
-
-      saveState(false);
+      saveLocalState(false);
       renderBuilder();
     });
 
@@ -1384,31 +1395,21 @@ function renderSectionList(){
 ========================= */
 
 function renderPreview(){
-
   const preview=document.getElementById("preview");
-
   preview.innerHTML="";
 
   state.sections
     .filter(section=>section.visible)
     .forEach(section=>{
-
       const el=document.createElement("div");
-
-      el.className=
-        "site-section "+
-        (section.id===selectedId ? "selected":"");
-
+      el.className="site-section "+(section.id===selectedId ? "selected":"");
       el.dataset.id=section.id;
 
       el.innerHTML=`
-
         <div class="section-overlay">
           <span class="section-tag">${escapeHtml(section.type)}</span>
         </div>
-
         ${renderSectionHTML(section)}
-
       `;
 
       el.addEventListener("click",()=>{
@@ -1417,62 +1418,38 @@ function renderPreview(){
       });
 
       preview.appendChild(el);
-
     });
 }
 
 function renderSectionHTML(section){
-
   if(section.type==="hero"){
-
     return `
       <div class="hero-preview"
         style="background-image:
         linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.2)),
         url('${escapeAttr(section.image)}')">
-
         <div class="hero-preview-content">
-
-          <span class="badge">
-            ${escapeHtml(section.badge)}
-          </span>
-
+          <span class="badge">${escapeHtml(section.badge)}</span>
           <h1>${escapeHtml(section.title)}</h1>
-
           <p>${escapeHtml(section.subtitle)}</p>
-
-          <span class="preview-btn">
-            ${escapeHtml(section.button)}
-          </span>
-
+          <span class="preview-btn">${escapeHtml(section.button)}</span>
         </div>
-
       </div>
     `;
   }
-
   if(section.type==="text"){
-
     return `
       <div class="text-preview">
-
         <h2>${escapeHtml(section.title)}</h2>
-
         <p>${escapeHtml(section.text)}</p>
-
       </div>
     `;
   }
-
   if(section.type==="cards"){
-
     return `
       <div class="text-preview">
-
         <h2>${escapeHtml(section.title)}</h2>
-
         <div class="cards-preview">
-
           <div class="card-preview">
             <img src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=80">
             <div>
@@ -1480,7 +1457,6 @@ function renderSectionHTML(section){
               <p>ئەزموونی سروشتی جیاواز</p>
             </div>
           </div>
-
           <div class="card-preview">
             <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80">
             <div>
@@ -1488,7 +1464,6 @@ function renderSectionHTML(section){
               <p>دوو ڕۆژ لەگەڵ هاوڕێکان</p>
             </div>
           </div>
-
           <div class="card-preview">
             <img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80">
             <div>
@@ -1496,37 +1471,22 @@ function renderSectionHTML(section){
               <p>یادەوەرییەکی جیاواز</p>
             </div>
           </div>
-
         </div>
-
       </div>
     `;
   }
-
   if(section.type==="gallery"){
-
     return `
       <div class="text-preview">
-
         <h2>${escapeHtml(section.title)}</h2>
-
         <div class="cards-preview">
-
-          <img style="width:100%;border-radius:14px"
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80">
-
-          <img style="width:100%;border-radius:14px"
-          src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=80">
-
-          <img style="width:100%;border-radius:14px"
-          src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80">
-
+          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80">
+          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=80">
+          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80">
         </div>
-
       </div>
     `;
   }
-
   return "";
 }
 
@@ -1535,193 +1495,96 @@ function renderSectionHTML(section){
 ========================= */
 
 function renderInspector(){
-
   const box=document.getElementById("inspector");
-
   const section=state.sections.find(x=>x.id===selectedId);
 
   if(!section){
-
-    box.innerHTML=`
-      <div class="empty">
-        هیچ بەشێک هەڵنەبژێردراوە
-      </div>
-    `;
-
+    box.innerHTML=`<div class="empty">هیچ بەشێک هەڵنەبژێردراوە</div>`;
     return;
   }
 
   document.getElementById("selectedLabel").textContent=section.type;
 
   let html=`
-
     <div class="form-group">
-
       <label>جۆری بەش</label>
-
       <select class="select" id="editType">
-
-        <option value="hero" ${section.type==="hero"?"selected":""}>
-          Hero
-        </option>
-
-        <option value="text" ${section.type==="text"?"selected":""}>
-          Text
-        </option>
-
-        <option value="cards" ${section.type==="cards"?"selected":""}>
-          Cards
-        </option>
-
-        <option value="gallery" ${section.type==="gallery"?"selected":""}>
-          Gallery
-        </option>
-
+        <option value="hero" ${section.type==="hero"?"selected":""}>Hero</option>
+        <option value="text" ${section.type==="text"?"selected":""}>Text</option>
+        <option value="cards" ${section.type==="cards"?"selected":""}>Cards</option>
+        <option value="gallery" ${section.type==="gallery"?"selected":""}>Gallery</option>
       </select>
-
     </div>
-
-  `;
-
-  html+=`
-
     <div class="form-group">
-
       <label>ناونیشان</label>
-
-      <input
-        class="input"
-        id="editTitle"
-        value="${escapeAttr(section.title || "")}"
-      >
-
+      <input class="input" id="editTitle" value="${escapeAttr(section.title || "")}">
     </div>
-
   `;
 
   if(section.type==="hero"){
-
     html+=`
-
       <div class="form-group">
-
         <label>Badge</label>
-
-        <input
-          class="input"
-          id="editBadge"
-          value="${escapeAttr(section.badge || "")}"
-        >
-
+        <input class="input" id="editBadge" value="${escapeAttr(section.badge || "")}">
       </div>
-
       <div class="form-group">
-
         <label>Subtitle</label>
-
-        <textarea
-          class="textarea"
-          id="editSubtitle"
-        >${escapeHtml(section.subtitle || "")}</textarea>
-
+        <textarea class="textarea" id="editSubtitle">${escapeHtml(section.subtitle || "")}</textarea>
       </div>
-
       <div class="form-group">
-
         <label>Button</label>
-
-        <input
-          class="input"
-          id="editButton"
-          value="${escapeAttr(section.button || "")}"
-        >
-
+        <input class="input" id="editButton" value="${escapeAttr(section.button || "")}">
       </div>
-
       <div class="form-group">
-
         <label>Image URL</label>
-
-        <input
-          class="input"
-          id="editImage"
-          value="${escapeAttr(section.image || "")}"
-        >
-
+        <input class="input" id="editImage" value="${escapeAttr(section.image || "")}">
       </div>
-
     `;
   }
 
   if(section.type==="text"){
-
     html+=`
-
       <div class="form-group">
-
         <label>دەق</label>
-
-        <textarea
-          class="textarea"
-          id="editText"
-        >${escapeHtml(section.text || "")}</textarea>
-
+        <textarea class="textarea" id="editText">${escapeHtml(section.text || "")}</textarea>
       </div>
-
     `;
   }
 
   html+=`
-
     <div class="divider"></div>
-
-    <button class="btn primary" style="width:100%" id="applyEdit">
-      ✓ جێبەجێکردن
-    </button>
-
+    <button class="btn primary" style="width:100%" id="applyEdit">✓ جێبەجێکردن</button>
   `;
 
   box.innerHTML=html;
 
   document.getElementById("editType").onchange=e=>{
-
     section.type=e.target.value;
-
     if(section.type==="hero"){
       section.badge=section.badge || "KURDIA ADVENTURE";
       section.subtitle=section.subtitle || "";
       section.button=section.button || "بینینی گەشتەکان";
       section.image=section.image || "";
     }
-
     if(section.type==="text"){
       section.text=section.text || "";
     }
-
-    saveState(false);
+    saveLocalState(false);
     renderBuilder();
   };
 
   document.getElementById("applyEdit").onclick=()=>{
-
     section.title=document.getElementById("editTitle").value;
-
     if(section.type==="hero"){
-
       section.badge=document.getElementById("editBadge").value;
       section.subtitle=document.getElementById("editSubtitle").value;
       section.button=document.getElementById("editButton").value;
       section.image=document.getElementById("editImage").value;
-
     }
-
     if(section.type==="text"){
-
       section.text=document.getElementById("editText").value;
-
     }
-
-    saveState();
+    saveLocalState();
     renderBuilder();
   };
 }
@@ -1731,10 +1594,7 @@ function renderInspector(){
 ========================= */
 
 document.getElementById("addSection").onclick=()=>{
-
-  const id=
-    "section-"+Date.now();
-
+  const id="section-"+Date.now();
   state.sections.push({
     id,
     type:"text",
@@ -1742,10 +1602,8 @@ document.getElementById("addSection").onclick=()=>{
     text:"دەقی بەشی نوێ لێرە بنووسە.",
     visible:true
   });
-
   selectedId=id;
-
-  saveState(false);
+  saveLocalState(false);
   renderBuilder();
 };
 
@@ -1754,81 +1612,43 @@ document.getElementById("addSection").onclick=()=>{
 ========================= */
 
 document.querySelectorAll(".device-btn").forEach(btn=>{
-
   btn.onclick=()=>{
-
-    document
-      .querySelectorAll(".device-btn")
-      .forEach(x=>x.classList.remove("active"));
-
+    document.querySelectorAll(".device-btn").forEach(x=>x.classList.remove("active"));
     btn.classList.add("active");
-
     const preview=document.getElementById("preview");
-
     preview.classList.remove("tablet","mobile");
-
-    if(btn.dataset.device==="tablet")
-      preview.classList.add("tablet");
-
-    if(btn.dataset.device==="mobile")
-      preview.classList.add("mobile");
+    if(btn.dataset.device==="tablet") preview.classList.add("tablet");
+    if(btn.dataset.device==="mobile") preview.classList.add("mobile");
   };
-
 });
 
 /* =========================
-   MEDIA
+   MEDIA & IMGBB UPLOAD
 ========================= */
 
 function renderMedia(){
-
   const grid=document.getElementById("mediaGrid");
-
   grid.innerHTML="";
 
   state.media.forEach((item,index)=>{
-
     const card=document.createElement("div");
-
     card.className="media-card";
-
     card.innerHTML=`
-
       <img src="${escapeAttr(item.url)}">
-
       <div class="media-card-info">
-
-        <b>${escapeHtml(item.name)}</b>
-
-        <br>
-
-        <small>${escapeHtml(item.type || "image")}</small>
-
-        <br><br>
-
-        <button
-          class="btn danger"
-          style="width:100%"
-          data-index="${index}"
-        >
-          سڕینەوە
-        </button>
-
+        <b>${escapeHtml(item.name)}</b><br>
+        <small style="cursor:pointer;color:var(--accent)" onclick="navigator.clipboard.writeText('${escapeAttr(item.url)}');toast('لینکی وێنە کۆپی کرا')">📋 کۆپیکردنی لینک</small><br><br>
+        <button class="btn danger" style="width:100%" data-index="${index}">سڕینەوە</button>
       </div>
-
     `;
 
     card.querySelector("button").onclick=()=>{
-
       state.media.splice(index,1);
-
-      saveState(false);
+      saveLocalState(false);
       renderMedia();
-
     };
 
     grid.appendChild(card);
-
   });
 
   document.getElementById("statMedia").textContent=state.media.length;
@@ -1842,31 +1662,35 @@ document.getElementById("uploadBox").onclick=()=>{
   document.getElementById("fileInput").click();
 };
 
-document.getElementById("fileInput").onchange=e=>{
+document.getElementById("fileInput").onchange=async e=>{
+  const files=[...e.target.files];
+  for(const file of files){
+    if(!file.type.startsWith("image/")) continue;
+    toast(`خەریکی ئەپڵۆدی ${file.name} بۆ ImgBB...`);
+    const formData = new FormData();
+    formData.append("image", file);
 
-  [...e.target.files].forEach(file=>{
-
-    if(!file.type.startsWith("image/")) return;
-
-    const reader=new FileReader();
-
-    reader.onload=event=>{
-
-      state.media.push({
-        name:file.name,
-        type:file.type,
-        url:event.target.result
+    try{
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
+        method: "POST",
+        body: formData
       });
-
-      saveState(false);
-      renderMedia();
-
-    };
-
-    reader.readAsDataURL(file);
-
-  });
-
+      const result = await res.json();
+      if(result.success){
+        state.media.push({
+          name: file.name,
+          url: result.data.url
+        });
+        saveLocalState(false);
+        renderMedia();
+        toast("وێنە لە هەور پاشەکەوت کرا ✓");
+      }else{
+        toast("هەڵە لە ئەپڵۆدی وێنە");
+      }
+    }catch(err){
+      toast("هەڵە لە پەیوەندی بە ImgBB");
+    }
+  }
 };
 
 /* =========================
@@ -1874,53 +1698,29 @@ document.getElementById("fileInput").onchange=e=>{
 ========================= */
 
 function sendAI(){
-
   const input=document.getElementById("aiInput");
-
   const text=input.value.trim();
-
   if(!text) return;
 
   const chat=document.getElementById("aiChat");
-
-  chat.innerHTML+=`
-    <div class="msg user">
-      ${escapeHtml(text)}
-    </div>
-  `;
-
+  chat.innerHTML+=`<div class="msg user">${escapeHtml(text)}</div>`;
   input.value="";
 
-  let answer=
-    "فەرمانەکەت تۆمار کرا. لەم وەشانەدا AI بە شێوەی local demo کاردەکات.";
-
+  let answer="فەرمانەکەت تۆمار کرا. لەم وەشانەدا AI بە شێوەی local demo کاردەکات.";
   if(text.includes("ناونیشان") || text.includes("سەردێڕ")){
-
-    answer=
-      "دەتوانم ناونیشانی بەشی هەڵبژێردراو بگۆڕم. تکایە ناونیشانی نوێ بنووسە.";
+    answer="دەتوانم ناونیشانی بەشی هەڵبژێردراو بگۆڕم. تکایە ناونیشانی نوێ بنووسە.";
   }
-
   if(text.includes("وێنە")){
-
-    answer=
-      "دەتوانیت لە Media Library وێنە upload بکەیت و URL ـەکە لە Inspector دابنێیت.";
+    answer="دەتوانیت لە Media Library وێنە upload بکەیت و لینکی وێنەکە ڕاستەوخۆ لە Inspector دابنێیت.";
   }
 
   setTimeout(()=>{
-
-    chat.innerHTML+=`
-      <div class="msg ai">
-        ${escapeHtml(answer)}
-      </div>
-    `;
-
+    chat.innerHTML+=`<div class="msg ai">${escapeHtml(answer)}</div>`;
     chat.scrollTop=chat.scrollHeight;
-
   },250);
 }
 
 document.getElementById("aiSend").onclick=sendAI;
-
 document.getElementById("aiInput").addEventListener("keydown",e=>{
   if(e.key==="Enter") sendAI();
 });
@@ -1930,104 +1730,60 @@ document.getElementById("aiInput").addEventListener("keydown",e=>{
 ========================= */
 
 document.getElementById("saveBtn").onclick=()=>{
-  saveState();
+  saveLocalState();
+  syncToCloud();
 };
 
 document.getElementById("publishBtn").onclick=()=>{
-
-  saveState(false);
-
-  localStorage.setItem(
-    "kurdia_admin_published",
-    JSON.stringify(state)
-  );
-
-  toast("وێبسایت Publish کرا ✓");
+  saveLocalState(false);
+  syncToCloud();
 };
 
 document.getElementById("previewBtn").onclick=()=>{
-
   const builder=document.querySelector('[data-page="builder"]');
-
   builder.click();
-
   toast("Preview ئامادەیە 👁");
-
 };
 
 /* =========================
-   THEME
+   THEME & RESET
 ========================= */
 
 document.getElementById("accentColor").oninput=e=>{
-
-  document.documentElement.style.setProperty(
-    "--accent",
-    e.target.value
-  );
-
+  document.documentElement.style.setProperty("--accent", e.target.value);
 };
-
-/* =========================
-   RESET
-========================= */
 
 document.getElementById("resetBtn").onclick=()=>{
-
-  if(!confirm("دڵنیایت دەتەوێت Builder reset بکەیت؟"))
-    return;
-
+  if(!confirm("دڵنیایت دەتەوێت Builder reset بکەیت؟")) return;
   state=structuredClone(DEFAULT_STATE);
-
   selectedId=state.sections[0].id;
-
-  saveState(false);
-
+  saveLocalState(false);
   renderBuilder();
-
   toast("Builder reset کرا");
-
 };
 
 /* =========================
-   STATS
+   STATS & TOAST
 ========================= */
 
 function updateStats(){
-
-  document.getElementById("statSections").textContent=
-    state.sections.filter(x=>x.visible).length;
-
-  document.getElementById("statMedia").textContent=
-    state.media.length;
-
+  document.getElementById("statSections").textContent=state.sections.filter(x=>x.visible).length;
+  document.getElementById("statMedia").textContent=state.media.length;
 }
-
-/* =========================
-   TOAST
-========================= */
 
 function toast(message){
-
   const el=document.getElementById("toast");
-
   el.textContent=message;
-
   el.classList.add("show");
-
   clearTimeout(window.__toast);
-
-  window.__toast=setTimeout(()=>{
-    el.classList.remove("show");
-  },2200);
+  window.__toast=setTimeout(()=>{ el.classList.remove("show"); },2500);
 }
 
 /* =========================
-   SECURITY / HTML HELPERS
+   SECURITY / HELPERS
 ========================= */
 
 function escapeHtml(value){
-
   return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
@@ -2047,6 +1803,7 @@ function escapeAttr(value){
 renderBuilder();
 renderMedia();
 updateStats();
+loadFromCloud();
 
 </script>
 
