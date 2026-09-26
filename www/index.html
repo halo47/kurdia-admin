@@ -3,1809 +3,896 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101214">
-<title>KURDIA ADMIN</title>
+<meta name="theme-color" content="#0b0d10">
+<title>KURDIA ADMIN - Smart Website Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
 :root{
-  --bg:#090b0d;
-  --panel:#111417;
-  --panel2:#171b1f;
-  --panel3:#1d2227;
-  --line:rgba(255,255,255,.08);
-  --text:#f4f5f6;
-  --muted:#8d969f;
-  --accent:#b92332;
-  --accent2:#e04754;
-  --success:#37c98a;
-  --warning:#f0b94c;
-  --danger:#ed5964;
-  --radius:18px;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --bg:#080b12;
+  --panel:#111722;
+  --panel2:#161e2b;
+  --border:#202938;
+  --text:#f5f5f5;
+  --muted:#8e99aa;
+  --accent:#9d1c32;
+  --accent-hover:#b3223b;
+  --success:#22c55e;
+  --danger:#ef4444;
+  --warning:#f59e0b;
 }
 
-html,body{
+body{
   margin:0;
   padding:0;
-  min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-button,input,textarea,select{font:inherit}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-.app{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:280px minmax(0,1fr);
-}
-
-/* SIDEBAR */
-.sidebar{
-  background:linear-gradient(180deg,#101316,#0b0d0f);
-  border-left:1px solid var(--line);
-  padding:20px 14px;
-  position:sticky;
-  top:0;
+  font-family:"Vazirmatn",sans-serif;
   height:100vh;
-  overflow:auto;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:8px 8px 22px;
-  border-bottom:1px solid var(--line);
-  margin-bottom:18px;
-}
-
-.logo{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,var(--accent),#731521);
-  font-weight:900;
-  box-shadow:0 10px 30px rgba(185,35,50,.3);
-}
-
-.brand h1{
-  font-size:17px;
-  margin:0;
-}
-
-.brand small{
-  display:block;
-  color:var(--muted);
-  margin-top:3px;
-}
-
-.nav{
-  display:grid;
-  gap:6px;
-}
-
-.nav button{
-  width:100%;
-  text-align:right;
-  color:#b9c0c6;
-  background:transparent;
-  padding:13px 14px;
-  border-radius:13px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  transition:.2s;
-}
-
-.nav button:hover,
-.nav button.active{
-  background:#1b2024;
-  color:white;
-}
-
-.nav button.active{
-  box-shadow:inset -3px 0 0 var(--accent);
-}
-
-.nav-icon{
-  width:22px;
-  text-align:center;
-}
-
-.sidebar-bottom{
-  margin-top:30px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-}
-
-.status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:#b8c0c6;
-  font-size:13px;
-}
-
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 12px var(--success);
-}
-
-/* MAIN */
-.main{
-  min-width:0;
-}
-
-.topbar{
-  height:74px;
-  border-bottom:1px solid var(--line);
-  background:rgba(9,11,13,.86);
-  backdrop-filter:blur(18px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 24px;
-  position:sticky;
-  top:0;
-  z-index:20;
-}
-
-.topbar-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.mobile-menu{
-  display:none;
-  background:#171b1f;
-  color:white;
-  border-radius:12px;
-  padding:10px 12px;
-}
-
-.page-title{
-  font-size:20px;
-  font-weight:800;
-}
-
-.top-actions{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-
-.btn{
-  border-radius:12px;
-  padding:10px 15px;
-  background:#1a1f23;
-  color:#fff;
-  border:1px solid var(--line);
-}
-
-.btn:hover{background:#23292e}
-
-.btn.primary{
-  background:var(--accent);
-  border-color:var(--accent);
-}
-
-.btn.primary:hover{background:var(--accent2)}
-
-.btn.success{
-  background:#17382d;
-  color:#8ff0c5;
-}
-
-.btn.danger{
-  background:#3a171b;
-  color:#ff9ca4;
-}
-
-.content{
-  padding:24px;
-  max-width:1500px;
-  margin:auto;
-}
-
-/* PAGES */
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-/* DASHBOARD */
-.hero{
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:28px;
-  background:
-    radial-gradient(circle at 15% 10%,rgba(185,35,50,.24),transparent 30%),
-    linear-gradient(135deg,#15191d,#0e1113);
-  box-shadow:var(--shadow);
-}
-
-.hero h2{
-  margin:0 0 8px;
-  font-size:30px;
-}
-
-.hero p{
-  margin:0;
-  color:var(--muted);
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-top:18px;
-}
-
-.stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-}
-
-.stat-label{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.stat-value{
-  font-size:28px;
-  font-weight:900;
-  margin-top:8px;
-}
-
-.stat-info{
-  margin-top:8px;
-  font-size:12px;
-  color:#6f7a83;
-}
-
-/* BUILDER */
-.builder-layout{
-  display:grid;
-  grid-template-columns:310px minmax(0,1fr) 330px;
-  gap:14px;
-  min-height:calc(100vh - 122px);
-}
-
-.panel{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  overflow:hidden;
-}
-
-.panel-head{
-  padding:15px 16px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.panel-head strong{
-  font-size:14px;
-}
-
-.panel-body{
-  padding:14px;
-}
-
-.section-list{
-  display:grid;
-  gap:8px;
-}
-
-.section-item{
-  background:#171b1f;
-  border:1px solid transparent;
-  border-radius:13px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  cursor:grab;
-}
-
-.section-item:hover{
-  border-color:#30373d;
-}
-
-.section-item.selected{
-  border-color:var(--accent);
-  background:#251417;
-}
-
-.drag{
-  color:#69727a;
-}
-
-.section-info{
-  flex:1;
-}
-
-.section-info b{
-  display:block;
-  font-size:13px;
-}
-
-.section-info small{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.section-actions{
-  display:flex;
-  gap:3px;
-}
-
-.icon-btn{
-  width:30px;
-  height:30px;
-  border-radius:9px;
-  background:#22282d;
-  color:#bfc6cb;
-}
-
-.icon-btn:hover{
-  background:#2d353b;
-  color:white;
-}
-
-.add-section{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border-radius:12px;
-  border:1px dashed #3b4248;
-  background:transparent;
-  color:#bfc6cb;
-}
-
-.add-section:hover{
-  border-color:var(--accent);
-  color:white;
-}
-
-/* CANVAS */
-.canvas{
-  background:#07090a;
-  border-radius:18px;
-  border:1px solid var(--line);
   display:flex;
   flex-direction:column;
   overflow:hidden;
 }
 
-.canvas-toolbar{
-  padding:10px;
-  border-bottom:1px solid var(--line);
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer;border:0;outline:none}
+
+/* HEADER */
+.topbar{
+  height:64px;
+  background:rgba(17,23,34,0.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
   display:flex;
-  justify-content:center;
-  gap:5px;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  z-index:30;
+  flex-shrink:0;
 }
 
-.device-btn{
-  padding:8px 13px;
-  background:#171b1f;
-  color:#9ea7ae;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.brand .logo{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),#500e19);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:16px;
+}
+.brand h1{
+  font-size:15px;
+  margin:0;
+  font-weight:800;
+}
+.brand small{
+  color:var(--muted);
+  font-size:11px;
+  display:block;
+}
+
+.actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn{
+  padding:8px 12px;
   border-radius:9px;
+  background:var(--panel2);
+  color:#fff;
+  border:1px solid var(--border);
+  font-size:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:.2s;
+}
+.btn:hover{background:#232d3d}
+.btn-primary{background:var(--accent);border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-success{background:#123026;border-color:#205842;color:#8ff0bd}
+.btn-danger{background:#35131b;border-color:#63202d;color:#ff9baa}
+
+/* MAIN LAYOUT */
+.builder{
+  flex:1;
+  display:grid;
+  grid-template-columns:290px minmax(0,1fr) 340px;
+  min-height:0;
 }
 
-.device-btn.active{
-  color:white;
-  background:#2a3035;
+/* SIDEBAR: SECTIONS */
+.sections-pane{
+  background:var(--panel);
+  border-left:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
-.preview-area{
+.pane-title{
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.section-list{
+  padding:12px;
+  overflow-y:auto;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.sec-card{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:grab;
+  transition:.2s;
+}
+.sec-card:hover{border-color:#3a475c}
+.sec-card.active{border-color:var(--accent);background:rgba(157,28,50,0.12)}
+.sec-card.hidden-sec{opacity:0.45}
+
+.sec-card-info{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.drag-handle{color:var(--muted);font-size:14px}
+.sec-card-name{font-size:13px;font-weight:600}
+.sec-card-type{font-size:10px;color:var(--muted);display:block}
+
+.sec-card-btns{display:flex;gap:4px}
+.icon-btn{
+  width:28px;
+  height:28px;
+  border-radius:7px;
+  background:var(--panel2);
+  color:#ccc;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+}
+.icon-btn:hover{background:#2a3649;color:#fff}
+
+/* CANVAS & PREVIEW */
+.canvas-pane{
+  background:#05070a;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  position:relative;
+}
+
+.viewport-bar{
+  height:44px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:rgba(10,14,20,0.7);
+}
+
+.view-btn{
+  padding:5px 12px;
+  border-radius:7px;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+}
+.view-btn.active{
+  background:var(--panel2);
+  color:#fff;
+  border:1px solid var(--border);
+}
+
+.preview-container{
   flex:1;
   overflow:auto;
-  padding:25px;
   display:flex;
   justify-content:center;
+  padding:20px;
 }
 
-.preview{
-  background:white;
-  color:#111;
+.site-frame{
+  background:#080b12;
+  border-radius:18px;
+  box-shadow:0 15px 50px rgba(0,0,0,0.6);
+  border:1px solid var(--border);
   width:100%;
-  max-width:1000px;
-  min-height:700px;
-  box-shadow:0 25px 80px rgba(0,0,0,.45);
-  overflow:hidden;
-  transition:.25s;
+  max-width:980px;
+  overflow-y:auto;
+  transition:max-width .3s ease;
+  position:relative;
 }
+.site-frame.tablet{max-width:768px}
+.site-frame.mobile{max-width:390px;border-radius:24px}
 
-.preview.tablet{
-  max-width:760px;
-}
-
-.preview.mobile{
-  max-width:390px;
-  border-radius:25px;
-}
-
-/* WEBSITE PREVIEW */
-.site-section{
+/* LIVE PREVIEW COMPONENTS */
+.live-sec{
   position:relative;
   outline:2px solid transparent;
   transition:.15s;
+  cursor:pointer;
 }
+.live-sec:hover{outline:2px dashed rgba(157,28,50,0.6)}
+.live-sec.selected{outline:2px solid var(--accent)}
 
-.site-section:hover{
-  outline:2px solid rgba(185,35,50,.55);
-}
-
-.site-section.selected{
-  outline:2px solid var(--accent);
-}
-
-.section-overlay{
-  position:absolute;
-  top:8px;
-  left:8px;
-  right:8px;
-  display:flex;
-  justify-content:space-between;
-  pointer-events:none;
-  z-index:3;
-}
-
-.section-tag{
-  background:rgba(0,0,0,.75);
+.live-hero{
+  padding:60px 24px;
   color:#fff;
-  padding:5px 9px;
-  border-radius:7px;
-  font-size:10px;
+  background-size:cover;
+  background-position:center;
+  text-align:right;
 }
-
-.hero-preview{
-  min-height:380px;
-  padding:60px 35px;
-  display:flex;
-  align-items:center;
-  background:
-    linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.2)),
-    url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85")
-    center/cover;
-  color:#fff;
-}
-
-.hero-preview-content{
-  max-width:620px;
-}
-
-.badge{
+.live-badge{
   display:inline-block;
-  background:#b92332;
-  padding:7px 12px;
+  background:var(--accent);
+  color:#fff;
+  padding:4px 10px;
   border-radius:99px;
   font-size:11px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
+.live-hero h2{font-size:32px;margin:0 0 10px;line-height:1.3}
+.live-hero p{color:#d1d5db;font-size:14px;margin:0;line-height:1.7}
 
-.hero-preview h1{
-  font-size:42px;
-  margin:0 0 12px;
+.live-trip{
+  padding:30px 24px;
+  background:rgba(22,30,43,0.6);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
 }
-
-.hero-preview p{
-  color:#ddd;
-  line-height:1.8;
-}
-
-.preview-btn{
-  display:inline-block;
-  background:#b92332;
-  color:white;
-  padding:12px 20px;
-  border-radius:10px;
-  margin-top:10px;
-}
-
-.cards-preview{
-  padding:35px;
+.trip-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:10px;
+  margin-top:15px;
+}
+.trip-box{
+  background:var(--bg);
+  padding:10px;
+  border-radius:9px;
+  border:1px solid var(--border);
+}
+.trip-box span{font-size:11px;color:var(--muted);display:block}
+.trip-box b{font-size:13px}
+
+.live-steps{
+  padding:30px 24px;
+}
+.step-item{
+  display:flex;
+  gap:12px;
+  margin-bottom:12px;
+  background:var(--panel2);
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.step-num{
+  background:var(--accent);
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+  flex-shrink:0;
 }
 
-.card-preview{
-  border:1px solid #ddd;
-  border-radius:15px;
+.live-booking{
+  padding:30px 24px;
+  text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(157,28,50,0.15));
+}
+
+/* INSPECTOR PANE */
+.inspector-pane{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
   overflow:hidden;
 }
 
-.card-preview img{
-  width:100%;
-  height:150px;
-  object-fit:cover;
+.inspector-body{
+  padding:16px;
+  overflow-y:auto;
+  flex:1;
 }
 
-.card-preview div{
-  padding:15px;
-}
-
-.text-preview{
-  padding:50px 35px;
-  text-align:center;
-}
-
-.text-preview h2{
-  font-size:30px;
-  margin:0 0 10px;
-}
-
-.text-preview p{
-  color:#555;
-  line-height:1.9;
-}
-
-/* INSPECTOR */
 .form-group{
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
-
 .form-group label{
   display:block;
-  font-size:12px;
-  color:#9ba4ab;
-  margin-bottom:7px;
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:600;
 }
-
-.input,
-.textarea,
-.select{
+.input, .textarea, .select{
   width:100%;
-  background:#0d1012;
+  background:#090d14;
+  border:1px solid var(--border);
   color:#fff;
-  border:1px solid #292f34;
-  border-radius:10px;
-  padding:11px 12px;
+  border-radius:8px;
+  padding:9px 12px;
+  font-size:12px;
   outline:none;
 }
+.input:focus, .textarea:focus{border-color:var(--accent)}
+.textarea{min-height:75px;resize:vertical}
 
-.textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-.input:focus,
-.textarea:focus,
-.select:focus{
-  border-color:var(--accent);
-}
-
-.color-row{
+.color-pair{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
 }
-
-.color-box{
+.color-ctrl{
   display:flex;
-  gap:8px;
   align-items:center;
-}
-
-.color-box input[type=color]{
-  width:45px;
-  height:40px;
-  padding:2px;
-  border:0;
+  gap:8px;
+  background:#090d14;
+  padding:6px;
   border-radius:8px;
-  background:#222;
+  border:1px solid var(--border);
 }
-
-.divider{
-  height:1px;
-  background:var(--line);
-  margin:18px 0;
-}
-
-.empty{
-  padding:30px 10px;
-  text-align:center;
-  color:var(--muted);
-}
-
-/* MEDIA */
-.media-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-
-.media-card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:15px;
-  overflow:hidden;
-}
-
-.media-card img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-}
-
-.media-card-info{
-  padding:10px;
-}
-
-.media-card-info small{
-  color:var(--muted);
-  word-break:break-all;
-}
-
-.upload-box{
-  border:1px dashed #3b4248;
-  border-radius:15px;
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:15px;
+.color-ctrl input[type=color]{
+  width:32px;
+  height:30px;
+  border:0;
+  border-radius:6px;
+  background:none;
   cursor:pointer;
 }
 
-/* AI */
-.ai-box{
-  border:1px solid var(--line);
-  background:linear-gradient(135deg,#15191d,#0d1012);
-  border-radius:22px;
-  padding:22px;
-}
-
-.ai-chat{
-  min-height:420px;
-  max-height:55vh;
-  overflow:auto;
-  padding:10px;
-}
-
-.msg{
-  max-width:80%;
-  padding:12px 15px;
-  border-radius:15px;
-  margin:8px 0;
-  line-height:1.7;
-}
-
-.msg.ai{
-  background:#191e22;
-  margin-left:auto;
-}
-
-.msg.user{
-  background:#3a171b;
-  margin-right:auto;
-}
-
-.ai-input{
+.upload-ctrl{
   display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.ai-input input{
-  flex:1;
-}
-
-/* SETTINGS */
-.settings-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.setting-card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-}
-
-.setting-card h3{
-  margin-top:0;
+  gap:6px;
 }
 
 /* TOAST */
 .toast{
   position:fixed;
-  bottom:25px;
-  left:25px;
-  background:#171c20;
-  border:1px solid var(--line);
-  padding:13px 17px;
-  border-radius:13px;
-  box-shadow:var(--shadow);
-  transform:translateY(120px);
+  bottom:20px;
+  left:20px;
+  background:#17202d;
+  color:#fff;
+  border:1px solid var(--border);
+  padding:10px 18px;
+  border-radius:10px;
+  font-size:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  transform:translateY(80px);
   opacity:0;
-  transition:.25s;
-  z-index:100;
+  transition:.25s ease;
+  z-index:9999;
 }
+.toast.show{transform:translateY(0);opacity:1}
 
-.toast.show{
-  transform:translateY(0);
-  opacity:1;
-}
-
-/* MOBILE */
-@media(max-width:1100px){
-  .builder-layout{
-    grid-template-columns:250px minmax(0,1fr);
-  }
-  .inspector-panel{
-    display:none;
-  }
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-  .media-grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-
-@media(max-width:800px){
-  .app{
-    display:block;
-  }
-
-  .sidebar{
-    position:fixed;
-    right:0;
-    top:0;
-    width:285px;
-    transform:translateX(105%);
-    transition:.25s;
-    z-index:60;
-    box-shadow:-30px 0 80px rgba(0,0,0,.5);
-  }
-
-  .sidebar.open{
-    transform:translateX(0);
-  }
-
-  .mobile-menu{
-    display:block;
-  }
-
-  .content{
-    padding:15px;
-  }
-
-  .topbar{
-    padding:0 14px;
-  }
-
-  .top-actions .hide-mobile{
-    display:none;
-  }
-
-  .builder-layout{
-    grid-template-columns:1fr;
-  }
-
-  .section-panel{
-    display:none;
-  }
-
-  .inspector-panel{
-    display:none;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .hero-preview h1{
-    font-size:31px;
-  }
-
-  .cards-preview{
-    grid-template-columns:1fr;
-  }
-
-  .settings-grid{
-    grid-template-columns:1fr;
-  }
-
-  .media-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+@media(max-width:900px){
+  .builder{grid-template-columns:1fr;overflow:auto}
+  .sections-pane, .inspector-pane{height:auto;border:0}
+  .site-frame{max-width:100% !important}
 }
 </style>
 </head>
-
 <body>
 
-<div class="app">
-
-  <aside class="sidebar" id="sidebar">
-
-    <div class="brand">
-      <div class="logo">K</div>
-      <div>
-        <h1>KURDIA ADMIN</h1>
-        <small>Smart Website Builder</small>
-      </div>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">K</div>
+    <div>
+      <h1>KURDIA ADMIN</h1>
+      <small>Smart Website Builder</small>
     </div>
+  </div>
 
-    <nav class="nav">
+  <div class="actions">
+    <button class="btn" id="undoBtn">↶ Undo</button>
+    <button class="btn" id="redoBtn">↷ Redo</button>
+    <button class="btn" id="saveDraftBtn">💾 Save Draft</button>
+    <button class="btn btn-primary" id="publishBtn">🚀 Publish</button>
+  </div>
+</header>
 
-      <button class="active" data-page="dashboard">
-        <span class="nav-icon">⌂</span>
-        داشبۆرد
-      </button>
-
-      <button data-page="builder">
-        <span class="nav-icon">✦</span>
-        Website Builder
-      </button>
-
-      <button data-page="media">
-        <span class="nav-icon">▧</span>
-        Media Library
-      </button>
-
-      <button data-page="ai">
-        <span class="nav-icon">✦</span>
-        Kurdia AI
-      </button>
-
-      <button data-page="settings">
-        <span class="nav-icon">⚙</span>
-        ڕێکخستنەکان
-      </button>
-
-    </nav>
-
-    <div class="sidebar-bottom">
-      <div class="status">
-        <span class="dot" id="cloudStatusDot"></span>
-        <span id="cloudStatusText">بەستراوە بە Cloud</span>
-      </div>
+<main class="builder">
+  <!-- 1. SECTIONS LIST -->
+  <aside class="sections-pane">
+    <div class="pane-title">
+      <span>بەشەکانی وێبسایت</span>
+      <span id="secCounter" style="color:var(--accent)">4</span>
     </div>
-
+    <div class="section-list" id="sectionList"></div>
+    <div style="padding:10px 12px;border-top:1px solid var(--border)">
+      <button class="btn btn-primary" style="width:100%" id="addSectionBtn">＋ زیادکردنی بەش</button>
+    </div>
   </aside>
 
-  <main class="main">
-
-    <header class="topbar">
-
-      <div class="topbar-left">
-        <button class="mobile-menu" id="menuBtn">☰</button>
-        <div class="page-title" id="pageTitle">داشبۆرد</div>
-      </div>
-
-      <div class="top-actions">
-        <button class="btn hide-mobile" id="previewBtn">👁 Preview</button>
-        <button class="btn" id="saveBtn">💾 پاشەکەوت</button>
-        <button class="btn primary" id="publishBtn">🚀 Publish</button>
-      </div>
-
-    </header>
-
-    <div class="content">
-
-      <!-- DASHBOARD -->
-      <section class="page active" id="page-dashboard">
-
-        <div class="hero">
-          <h2>بەخێربێیت بۆ KURDIA ADMIN</h2>
-          <p>
-            لێرەوە دەتوانیت هەموو بەشەکانی وێبسایتی KURDIA ADVENTURE بەڕێوە ببەیت.
-          </p>
-        </div>
-
-        <div class="stats">
-
-          <div class="stat">
-            <div class="stat-label">بەشەکانی وێبسایت</div>
-            <div class="stat-value" id="statSections">6</div>
-            <div class="stat-info">Active sections</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">وێنەکان</div>
-            <div class="stat-value" id="statMedia">0</div>
-            <div class="stat-info">Media library</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">دۆخی پڕۆژە</div>
-            <div class="stat-value" id="cloudSyncStatus" style="font-size:21px">Cloud Live</div>
-            <div class="stat-info">JSONBin Database</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">AI Builder</div>
-            <div class="stat-value">ON</div>
-            <div class="stat-info">Kurdish commands</div>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- BUILDER -->
-      <section class="page" id="page-builder">
-
-        <div class="builder-layout">
-
-          <!-- SECTIONS -->
-          <div class="panel section-panel">
-
-            <div class="panel-head">
-              <strong>بەشەکانی وێبسایت</strong>
-              <span id="sectionCount">6</span>
-            </div>
-
-            <div class="panel-body">
-
-              <div class="section-list" id="sectionList"></div>
-
-              <button class="add-section" id="addSection">
-                ＋ زیادکردنی بەش
-              </button>
-
-            </div>
-
-          </div>
-
-          <!-- CANVAS -->
-          <div class="canvas">
-
-            <div class="canvas-toolbar">
-
-              <button class="device-btn active" data-device="desktop">
-                🖥 Desktop
-              </button>
-
-              <button class="device-btn" data-device="tablet">
-                ▣ Tablet
-              </button>
-
-              <button class="device-btn" data-device="mobile">
-                📱 Mobile
-              </button>
-
-            </div>
-
-            <div class="preview-area">
-
-              <div class="preview" id="preview">
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- INSPECTOR -->
-          <div class="panel inspector-panel">
-
-            <div class="panel-head">
-              <strong>دەستکاریکردن</strong>
-              <span id="selectedLabel">هیچ</span>
-            </div>
-
-            <div class="panel-body" id="inspector">
-
-              <div class="empty">
-                بەشێک هەڵبژێرە بۆ دەستکاریکردن
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- MEDIA -->
-      <section class="page" id="page-media">
-
-        <div class="panel">
-
-          <div class="panel-head">
-            <strong>Media Library (ImgBB Cloud)</strong>
-            <button class="btn primary" id="uploadBtn">＋ Upload</button>
-          </div>
-
-          <div class="panel-body">
-
-            <input type="file" id="fileInput" accept="image/*" multiple hidden>
-
-            <div class="upload-box" id="uploadBox">
-              🖼️
-              <br>
-              وێنەکانت لێرە زیاد بکە تا ڕاستەوخۆ بچنە سەر ImgBB
-              <br>
-              <small>PNG / JPG / WEBP</small>
-            </div>
-
-            <div class="media-grid" id="mediaGrid"></div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- AI -->
-      <section class="page" id="page-ai">
-
-        <div class="ai-box">
-
-          <h2>✦ Kurdia AI Builder</h2>
-
-          <p style="color:var(--muted)">
-            بە زمانی کوردی فرمان بدە و دەستکارییەکان لە Builder ـدا ببینە.
-          </p>
-
-          <div class="ai-chat" id="aiChat">
-
-            <div class="msg ai">
-              سڵاو 👋<br>
-              من Kurdia AI ـم. دەتوانیت بە کوردی بڵێیت چی دەتەوێت لە وێبسایتەکە بگۆڕدرێت.
-            </div>
-
-          </div>
-
-          <div class="ai-input">
-
-            <input
-              class="input"
-              id="aiInput"
-              placeholder="نموونە: ناونیشانی Hero بگۆڕە بۆ..."
-            >
-
-            <button class="btn primary" id="aiSend">
-              ناردن
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- SETTINGS -->
-      <section class="page" id="page-settings">
-
-        <div class="settings-grid">
-
-          <div class="setting-card">
-
-            <h3>🎨 Theme</h3>
-
-            <div class="form-group">
-              <label>Accent Color</label>
-              <div class="color-box">
-                <input type="color" id="accentColor" value="#b92332">
-                <span>ڕەنگی سەرەکی</span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Site Direction</label>
-              <select class="select">
-                <option>RTL — کوردی</option>
-                <option>LTR</option>
-              </select>
-            </div>
-
-          </div>
-
-          <div class="setting-card">
-
-            <h3>💾 هەور و داتابەیس</h3>
-
-            <p style="color:var(--muted)">
-              داتاکان لەگەڵ JSONBin بە شێوەی ئۆنلاین سینک دەبن.
-            </p>
-
-            <button class="btn danger" id="resetBtn">
-              Reset Builder
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
+  <!-- 2. CANVAS & PREVIEW -->
+  <section class="canvas-pane">
+    <div class="viewport-bar">
+      <button class="view-btn active" data-view="desktop">🖥 Desktop</button>
+      <button class="view-btn" data-view="tablet">▣ Tablet</button>
+      <button class="view-btn" data-view="mobile">📱 Mobile</button>
     </div>
+    <div class="preview-container">
+      <div class="site-frame" id="siteFrame">
+        <!-- Rendered Sections -->
+        <div id="livePreview"></div>
+      </div>
+    </div>
+  </section>
 
-  </main>
-
-</div>
+  <!-- 3. INSPECTOR -->
+  <aside class="inspector-pane">
+    <div class="pane-title">
+      <span>دەستکاریکردن (Inspector)</span>
+      <span id="activeSecType" style="color:var(--muted)">هیچ</span>
+    </div>
+    <div class="inspector-body" id="inspectorContent">
+      <div style="text-align:center;color:var(--muted);padding:30px 10px;font-size:12px">
+        بەشێک هەڵبژێرە بۆ دەستکاریکردنی فیلدەکان
+      </div>
+    </div>
+  </aside>
+</main>
 
 <div class="toast" id="toast"></div>
 
 <script>
 "use strict";
 
-/* =========================
-   KEYS & CLOUD CONFIG
-========================= */
 const BIN_ID = "6ab7f417ac6210605af863a3";
 const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
 const IMGBB_KEY = "c89b7b9f5eaae43bce82e66b4d3f572a";
 
-const DEFAULT_STATE = {
-  sections:[
-    {
-      id:"hero",
-      type:"hero",
-      title:"گەشتەکانت لەگەڵ KURDIA دەست پێ دەکەن",
-      subtitle:"گەشتی سروشت، شاخ و ئەزموونی جیاواز لە کوردستان.",
-      badge:"KURDIA ADVENTURE",
-      button:"بینینی گەشتەکان",
-      image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85",
-      visible:true
-    },
-    {
-      id:"about",
-      type:"text",
-      title:"KURDIA ADVENTURE",
-      text:"ئێمە بۆ دروستکردنی یادەوەرییە جیاوازەکان لە سروشتی جوانی کوردستان گەشت ڕێکدەخەین.",
-      visible:true
-    },
-    {
-      id:"trips",
-      type:"cards",
-      title:"گەشتەکانی ئێمە",
-      visible:true
-    },
-    {
-      id:"services",
-      type:"cards",
-      title:"خزمەتگوزارییەکان",
-      visible:true
-    },
-    {
-      id:"gallery",
-      type:"gallery",
-      title:"گەلەری",
-      visible:true
-    },
-    {
-      id:"contact",
-      type:"text",
-      title:"پەیوەندیمان پێوە بکە",
-      text:"بۆ زانیاری زیاتر و بەشداری لە گەشتەکانمان پەیوەندیمان پێوە بکە.",
-      visible:true
-    }
-  ],
-  media:[]
+const STORAGE_KEY = "kurdia_builder_draft_v3";
+const PUBLISHED_KEY = "kurdia_builder_published_v3";
+
+const DEFAULT_DATA = {
+  gradColor1: "#9d1c32",
+  gradColor2: "#111827",
+  heroBadge: "KURDIA ADVENTURE",
+  heroTitle: "ئەزموونی سروشت و شاخ لە کوردستان",
+  heroSubtitle: "لەگەڵ ئێمە یادەوەریی تایبەت و سروشتی نەبینراو ببینە",
+  heroImageUrl: "",
+  bookingOpen: true,
+  tripTitle: "گەشتی تایبەت",
+  tripPrice: "50,000 IQD",
+  tripDifficulty: "ئاسان",
+  tripDuration: "1 ڕۆژ",
+  tripTime: "06:00",
+  tripLocation: "کوردستان",
+  tripDesc: "گەشتێکی پڕ لە چێژ و بینینی دیمەنە ناوازەکانی سروشت.",
+  step1: "پەیوەندی و ناونووسین",
+  step2: "ئامادەکاری پێداویستییەکان",
+  step3: "بەڕێکەوتن بەرەو شوێنی گەشت",
+  step4: "چێژوەرگرتن لە سروشت",
+  seoTitle: "KURDIA ADVENTURE",
+  seoDescription: "گەشتی سروشت و شاخ لە کوردستان",
+  socialImage: "",
+  gallery: [],
+  sections: [
+    { id: "hero_1", type: "hero", title: "Hero", visible: true },
+    { id: "trip_1", type: "trip", title: "گەشت", visible: true },
+    { id: "services_1", type: "services", title: "هەنگاوەکان", visible: true },
+    { id: "booking_1", type: "booking", title: "Booking", visible: true }
+  ]
 };
 
-let state = loadLocalState();
+let state = loadInitialState();
 let selectedId = state.sections[0]?.id || null;
 
-/* =========================
-   LOCAL & CLOUD STORAGE
-========================= */
+// History for Undo/Redo
+let historyStack = [JSON.stringify(state)];
+let historyIndex = 0;
 
-function loadLocalState(){
-  try{
-    const raw=localStorage.getItem("kurdia_admin_state");
-    return raw ? JSON.parse(raw) : structuredClone(DEFAULT_STATE);
-  }catch(e){
-    return structuredClone(DEFAULT_STATE);
+function pushState(newState){
+  if(historyIndex < historyStack.length - 1){
+    historyStack = historyStack.slice(0, historyIndex + 1);
+  }
+  historyStack.push(JSON.stringify(newState));
+  historyIndex++;
+  state = newState;
+  renderAll();
+}
+
+function undo(){
+  if(historyIndex > 0){
+    historyIndex--;
+    state = JSON.parse(historyStack[historyIndex]);
+    renderAll();
+    toast("گەڕایەوە دواوە ↶");
   }
 }
 
-async function loadFromCloud(){
+function redo(){
+  if(historyIndex < historyStack.length - 1){
+    historyIndex++;
+    state = JSON.parse(historyStack[historyIndex]);
+    renderAll();
+    toast("چووە پێشەوە ↷");
+  }
+}
+
+document.getElementById("undoBtn").onclick = undo;
+document.getElementById("redoBtn").onclick = redo;
+
+function loadInitialState(){
   try{
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-      headers: { "X-Master-Key": API_KEY }
-    });
-    if(res.ok){
-      const data = await res.json();
-      if(data.record && data.record.sections){
-        state = data.record;
-        saveLocalState(false);
-        renderBuilder();
-        renderMedia();
-        toast("داتاکان لە هەورەوە هێنران ✓");
-      }
+    const draft = localStorage.getItem(STORAGE_KEY);
+    if(draft) return Object.assign({}, DEFAULT_DATA, JSON.parse(draft));
+    const pub = localStorage.getItem(PUBLISHED_KEY);
+    if(pub) return Object.assign({}, DEFAULT_DATA, JSON.parse(pub));
+  }catch(e){}
+  return structuredClone(DEFAULT_DATA);
+}
+
+function renderAll(){
+  renderSectionList();
+  renderLivePreview();
+  renderInspector();
+}
+
+/* 1. SECTIONS LIST RENDERING & DRAG/DROP */
+function renderSectionList(){
+  const list = document.getElementById("sectionList");
+  list.innerHTML = "";
+  document.getElementById("secCounter").textContent = state.sections.length;
+
+  state.sections.forEach((sec, idx)=>{
+    const el = document.createElement("div");
+    el.className = "sec-card " + (sec.id === selectedId ? "active ":"") + (!sec.visible ? "hidden-sec":"");
+    el.draggable = true;
+    el.dataset.id = sec.id;
+
+    el.innerHTML = `
+      <div class="sec-card-info">
+        <span class="drag-handle">☰</span>
+        <div>
+          <span class="sec-card-name">${escapeHtml(sec.title || sec.type)}</span>
+          <span class="sec-card-type">${sec.type}</span>
+        </div>
+      </div>
+      <div class="sec-card-btns">
+        <button class="icon-btn vis-btn">${sec.visible ? "◉":"○"}</button>
+        <button class="icon-btn del-btn">×</button>
+      </div>
+    `;
+
+    el.onclick = (e)=>{
+      if(e.target.closest("button")) return;
+      selectedId = sec.id;
+      renderAll();
+    };
+
+    el.querySelector(".vis-btn").onclick = (e)=>{
+      e.stopPropagation();
+      const updated = structuredClone(state);
+      updated.sections[idx].visible = !updated.sections[idx].visible;
+      pushState(updated);
+    };
+
+    el.querySelector(".del-btn").onclick = (e)=>{
+      e.stopPropagation();
+      if(state.sections.length <= 1) return toast("دەبێت لانیکەم یەک بەش بمێنێتەوە");
+      const updated = structuredClone(state);
+      updated.sections.splice(idx, 1);
+      if(selectedId === sec.id) selectedId = updated.sections[0]?.id;
+      pushState(updated);
+    };
+
+    // Drag events
+    el.ondragstart = (e)=>{ e.dataTransfer.setData("text/plain", sec.id); };
+    el.ondragover = (e)=>{ e.preventDefault(); };
+    el.ondrop = (e)=>{
+      e.preventDefault();
+      const fromId = e.dataTransfer.getData("text/plain");
+      if(!fromId || fromId === sec.id) return;
+      const updated = structuredClone(state);
+      const fIdx = updated.sections.findIndex(x=>x.id === fromId);
+      const tIdx = updated.sections.findIndex(x=>x.id === sec.id);
+      const [moved] = updated.sections.splice(fIdx, 1);
+      updated.sections.splice(tIdx, 0, moved);
+      pushState(updated);
+    };
+
+    list.appendChild(el);
+  });
+}
+
+/* 2. LIVE PREVIEW RENDERING */
+function renderLivePreview(){
+  const live = document.getElementById("livePreview");
+  live.innerHTML = "";
+
+  state.sections.filter(s => s.visible).forEach(sec => {
+    const wrap = document.createElement("div");
+    wrap.className = "live-sec " + (sec.id === selectedId ? "selected" : "");
+    wrap.onclick = ()=>{ selectedId = sec.id; renderAll(); };
+
+    if(sec.type === "hero"){
+      const bgImg = state.heroImageUrl ? `url('${state.heroImageUrl}')` : `none`;
+      wrap.innerHTML = `
+        <div class="live-hero" style="background:linear-gradient(135deg, ${state.gradColor1}dd, ${state.gradColor2}ee), ${bgImg} center/cover;">
+          <span class="live-badge">${escapeHtml(state.heroBadge)}</span>
+          <h2>${escapeHtml(state.heroTitle)}</h2>
+          <p>${escapeHtml(state.heroSubtitle)}</p>
+        </div>
+      `;
+    }else if(sec.type === "trip"){
+      wrap.innerHTML = `
+        <div class="live-trip">
+          <h3 style="margin:0 0 10px">${escapeHtml(state.tripTitle)}</h3>
+          <p style="color:var(--muted);font-size:13px;margin:0">${escapeHtml(state.tripDesc)}</p>
+          <div class="trip-grid">
+            <div class="trip-box"><span>نرخ</span><b>${escapeHtml(state.tripPrice)}</b></div>
+            <div class="trip-box"><span>ئاست</span><b>${escapeHtml(state.tripDifficulty)}</b></div>
+            <div class="trip-box"><span>ماوە</span><b>${escapeHtml(state.tripDuration)}</b></div>
+            <div class="trip-box"><span>کات</span><b>${escapeHtml(state.tripTime)}</b></div>
+            <div class="trip-box"><span>شوێن</span><b>${escapeHtml(state.tripLocation)}</b></div>
+          </div>
+        </div>
+      `;
+    }else if(sec.type === "services"){
+      wrap.innerHTML = `
+        <div class="live-steps">
+          <h4 style="margin:0 0 14px">قۆناغ و هەنگاوەکان</h4>
+          <div class="step-item"><span class="step-num">1</span><span>${escapeHtml(state.step1)}</span></div>
+          <div class="step-item"><span class="step-num">2</span><span>${escapeHtml(state.step2)}</span></div>
+          <div class="step-item"><span class="step-num">3</span><span>${escapeHtml(state.step3)}</span></div>
+          <div class="step-item"><span class="step-num">4</span><span>${escapeHtml(state.step4)}</span></div>
+        </div>
+      `;
+    }else if(sec.type === "booking"){
+      wrap.innerHTML = `
+        <div class="live-booking">
+          <h3>ناونووسین و حجزکردن</h3>
+          <p style="color:${state.bookingOpen ? 'var(--success)' : 'var(--danger)'};font-weight:700">
+            ${state.bookingOpen ? "دەرگای ناونووسین کراوەیە ✓" : "ناونووسین داخراوە ✕"}
+          </p>
+        </div>
+      `;
+    }else{
+      wrap.innerHTML = `
+        <div style="padding:30px 20px;text-align:center;border-bottom:1px solid var(--border)">
+          <h3>${escapeHtml(sec.title || sec.type)}</h3>
+          <p style="color:var(--muted)">بەشی نوێ</p>
+        </div>
+      `;
     }
-  }catch(err){
-    console.log("Cloud load failed, using local", err);
+    live.appendChild(wrap);
+  });
+}
+
+/* 3. INSPECTOR RENDERING */
+function renderInspector(){
+  const body = document.getElementById("inspectorContent");
+  const sec = state.sections.find(s => s.id === selectedId);
+  if(!sec){
+    body.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px 10px;">بەشێک هەڵبژێرە</div>`;
+    document.getElementById("activeSecType").textContent = "هیچ";
+    return;
+  }
+
+  document.getElementById("activeSecType").textContent = sec.type;
+  let html = `
+    <div class="form-group">
+      <label>ناوی بەش لە پێڕست</label>
+      <input class="input" id="inp_secTitle" value="${escapeAttr(sec.title)}">
+    </div>
+  `;
+
+  if(sec.type === "hero"){
+    html += `
+      <div class="form-group">
+        <label>ڕەنگەکانی Gradient</label>
+        <div class="color-pair">
+          <div class="color-ctrl"><input type="color" id="inp_c1" value="${state.gradColor1}"><span>Color 1</span></div>
+          <div class="color-ctrl"><input type="color" id="inp_c2" value="${state.gradColor2}"><span>Color 2</span></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Hero Badge</label>
+        <input class="input" id="inp_heroBadge" value="${escapeAttr(state.heroBadge)}">
+      </div>
+      <div class="form-group">
+        <label>ناونیشانی سەرەکی (Hero Title)</label>
+        <input class="input" id="inp_heroTitle" value="${escapeAttr(state.heroTitle)}">
+      </div>
+      <div class="form-group">
+        <label>سەردێڕی دووەم (Subtitle)</label>
+        <textarea class="textarea" id="inp_heroSubtitle">${escapeHtml(state.heroSubtitle)}</textarea>
+      </div>
+      <div class="form-group">
+        <label>وێنەی پێشەوە (Hero Image)</label>
+        <div class="upload-ctrl">
+          <input class="input" id="inp_heroImageUrl" value="${escapeAttr(state.heroImageUrl)}" placeholder="URL">
+          <button class="btn" id="uploadHeroImgBtn">📷</button>
+          <input type="file" id="heroFileInput" accept="image/*" hidden>
+        </div>
+      </div>
+    `;
+  }else if(sec.type === "trip"){
+    html += `
+      <div class="form-group"><label>ناوی گەشت (Title)</label><input class="input" id="inp_tripTitle" value="${escapeAttr(state.tripTitle)}"></div>
+      <div class="form-group"><label>نرخ</label><input class="input" id="inp_tripPrice" value="${escapeAttr(state.tripPrice)}"></div>
+      <div class="form-group"><label>ئاستی گەشت</label><input class="input" id="inp_tripDiff" value="${escapeAttr(state.tripDifficulty)}"></div>
+      <div class="form-group"><label>ماوە</label><input class="input" id="inp_tripDur" value="${escapeAttr(state.tripDuration)}"></div>
+      <div class="form-group"><label>کاتژمێر</label><input class="input" id="inp_tripTime" value="${escapeAttr(state.tripTime)}"></div>
+      <div class="form-group"><label>شوێن</label><input class="input" id="inp_tripLoc" value="${escapeAttr(state.tripLocation)}"></div>
+      <div class="form-group"><label>دەربارەی گەشت (تێبینی)</label><textarea class="textarea" id="inp_tripDesc">${escapeHtml(state.tripDesc)}</textarea></div>
+    `;
+  }else if(sec.type === "services"){
+    html += `
+      <div class="form-group"><label>هەنگاوی ١</label><input class="input" id="inp_step1" value="${escapeAttr(state.step1)}"></div>
+      <div class="form-group"><label>هەنگاوی ٢</label><input class="input" id="inp_step2" value="${escapeAttr(state.step2)}"></div>
+      <div class="form-group"><label>هەنگاوی ٣</label><input class="input" id="inp_step3" value="${escapeAttr(state.step3)}"></div>
+      <div class="form-group"><label>هەنگاوی ٤</label><input class="input" id="inp_step4" value="${escapeAttr(state.step4)}"></div>
+    `;
+  }else if(sec.type === "booking"){
+    html += `
+      <div class="form-group">
+        <label>دۆخی حجز و ناونووسین</label>
+        <select class="select" id="inp_bookingOpen">
+          <option value="true" ${state.bookingOpen ? "selected":""}>کراوە بێت (Open)</option>
+          <option value="false" ${!state.bookingOpen ? "selected":""}>داخراو بێت (Closed)</option>
+        </select>
+      </div>
+    `;
+  }
+
+  html += `<button class="btn btn-primary" style="width:100%;margin-top:10px" id="applyInspectorBtn">✓ نوێکردنەوە لە Preview</button>`;
+  body.innerHTML = html;
+
+  // Event handlers
+  document.getElementById("applyInspectorBtn").onclick = ()=>{
+    const updated = structuredClone(state);
+    const targetSec = updated.sections.find(s=>s.id === selectedId);
+    if(targetSec) targetSec.title = document.getElementById("inp_secTitle").value;
+
+    if(sec.type === "hero"){
+      updated.gradColor1 = document.getElementById("inp_c1").value;
+      updated.gradColor2 = document.getElementById("inp_c2").value;
+      updated.heroBadge = document.getElementById("inp_heroBadge").value;
+      updated.heroTitle = document.getElementById("inp_heroTitle").value;
+      updated.heroSubtitle = document.getElementById("inp_heroSubtitle").value;
+      updated.heroImageUrl = document.getElementById("inp_heroImageUrl").value;
+    }else if(sec.type === "trip"){
+      updated.tripTitle = document.getElementById("inp_tripTitle").value;
+      updated.tripPrice = document.getElementById("inp_tripPrice").value;
+      updated.tripDifficulty = document.getElementById("inp_tripDiff").value;
+      updated.tripDuration = document.getElementById("inp_tripDur").value;
+      updated.tripTime = document.getElementById("inp_tripTime").value;
+      updated.tripLocation = document.getElementById("inp_tripLoc").value;
+      updated.tripDesc = document.getElementById("inp_tripDesc").value;
+    }else if(sec.type === "services"){
+      updated.step1 = document.getElementById("inp_step1").value;
+      updated.step2 = document.getElementById("inp_step2").value;
+      updated.step3 = document.getElementById("inp_step3").value;
+      updated.step4 = document.getElementById("inp_step4").value;
+    }else if(sec.type === "booking"){
+      updated.bookingOpen = document.getElementById("inp_bookingOpen").value === "true";
+    }
+
+    pushState(updated);
+    toast("دەستکارییەکان جێبەجێ کران ✓");
+  };
+
+  // Image Upload handler
+  const upBtn = document.getElementById("uploadHeroImgBtn");
+  if(upBtn){
+    const fileInp = document.getElementById("heroFileInput");
+    upBtn.onclick = ()=> fileInp.click();
+    fileInp.onchange = async (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      toast("خەریکی بارکردنی وێنەیە بۆ ImgBB...");
+      const fd = new FormData();
+      fd.append("image", file);
+      try{
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method:"POST", body:fd });
+        const data = await res.json();
+        if(data.success){
+          document.getElementById("inp_heroImageUrl").value = data.data.url;
+          toast("وێنەکە سەرکەوتووانە بارکرا ✓");
+        }else toast("هەڵە لە بارکردنی وێنە");
+      }catch(err){ toast("کێشەی پەیوەندی هەیە"); }
+    };
   }
 }
 
-function saveLocalState(notify=true){
-  localStorage.setItem("kurdia_admin_state",JSON.stringify(state));
-  if(notify) toast("داتا لە مۆبایل پاشەکەوت کرا ✓");
-  updateStats();
-}
+/* 4. ADD NEW SECTION */
+document.getElementById("addSectionBtn").onclick = ()=>{
+  const newId = "sec_" + Date.now();
+  const updated = structuredClone(state);
+  updated.sections.push({ id: newId, type: "custom", title: "بەشی نوێ", visible: true });
+  selectedId = newId;
+  pushState(updated);
+  toast("بەشی نوێ زیادکرا");
+};
 
-async function syncToCloud(){
-  toast("خەریکی پاشەکەوتکردنە لە هەور...");
+/* 5. VIEWPORT TOGGLES */
+document.querySelectorAll(".view-btn").forEach(btn => {
+  btn.onclick = ()=>{
+    document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const frame = document.getElementById("siteFrame");
+    frame.className = "site-frame " + (btn.dataset.view === "tablet" ? "tablet" : btn.dataset.view === "mobile" ? "mobile" : "");
+  };
+});
+
+/* 6. SAVE DRAFT & PUBLISH (JSONBin & LocalStorage) */
+document.getElementById("saveDraftBtn").onclick = ()=>{
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  toast("درافت بە سەرکەوتوویی پاشەکەوت کرا ✓");
+};
+
+document.getElementById("publishBtn").onclick = async ()=>{
+  localStorage.setItem(PUBLISHED_KEY, JSON.stringify(state));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  toast("خەریکی بڵاوکردنەوەیە لە JSONBin...");
+
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Master-Key": API_KEY
+        "X-Access-Key": API_KEY
       },
       body: JSON.stringify(state)
     });
     if(res.ok){
-      toast("داتاکان بە سەرکەوتوویی لە هەور نوێکرانەوە ✓");
-      document.getElementById("cloudSyncStatus").textContent = "Synced";
+      toast("🚀 وێبسایت بە سەرکەوتوویی بڵاوکرایەوە (Published)");
     }else{
-      toast("هەڵە لە پاشەکەوتکردنی هەور!");
+      toast("پاشەکەوت بوو، بەڵام هەڵە لە هەور هەیە!");
     }
   }catch(e){
-    toast("هەڵە لە پەیوەندی بە ئینتەرنێتەوە");
-  }
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-const titles={
-  dashboard:"داشبۆرد",
-  builder:"Website Builder",
-  media:"Media Library",
-  ai:"Kurdia AI",
-  settings:"ڕێکخستنەکان"
-};
-
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const page=btn.dataset.page;
-    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-    document.getElementById("page-"+page).classList.add("active");
-    document.getElementById("pageTitle").textContent=titles[page];
-    document.getElementById("sidebar").classList.remove("open");
-
-    if(page==="builder") renderBuilder();
-    if(page==="media") renderMedia();
-  });
-});
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-document.getElementById("menuBtn").onclick=()=>{
-  document.getElementById("sidebar").classList.toggle("open");
-};
-
-/* =========================
-   BUILDER
-========================= */
-
-function renderBuilder(){
-  renderSectionList();
-  renderPreview();
-  renderInspector();
-  updateStats();
-}
-
-function renderSectionList(){
-  const list=document.getElementById("sectionList");
-  list.innerHTML="";
-
-  state.sections.forEach((section)=>{
-    const item=document.createElement("div");
-    item.className="section-item "+(section.id===selectedId ? "selected":"");
-    item.draggable=true;
-    item.dataset.id=section.id;
-
-    item.innerHTML=`
-      <span class="drag">☷</span>
-      <div class="section-info">
-        <b>${escapeHtml(section.title || section.type)}</b>
-        <small>${section.type}</small>
-      </div>
-      <div class="section-actions">
-        <button class="icon-btn visibility">${section.visible ? "◉":"○"}</button>
-        <button class="icon-btn delete">×</button>
-      </div>
-    `;
-
-    item.addEventListener("click",e=>{
-      if(e.target.closest("button")) return;
-      selectedId=section.id;
-      renderSectionList();
-      renderPreview();
-      renderInspector();
-    });
-
-    item.querySelector(".visibility").onclick=e=>{
-      e.stopPropagation();
-      section.visible=!section.visible;
-      saveLocalState(false);
-      renderBuilder();
-    };
-
-    item.querySelector(".delete").onclick=e=>{
-      e.stopPropagation();
-      if(state.sections.length<=1){
-        toast("دەبێت لانیکەم یەک بەش بمێنێتەوە");
-        return;
-      }
-      state.sections=state.sections.filter(x=>x.id!==section.id);
-      if(selectedId===section.id) selectedId=state.sections[0]?.id;
-      saveLocalState(false);
-      renderBuilder();
-    };
-
-    item.addEventListener("dragstart",e=>{
-      e.dataTransfer.setData("text/plain",section.id);
-    });
-
-    item.addEventListener("dragover",e=>{
-      e.preventDefault();
-    });
-
-    item.addEventListener("drop",e=>{
-      e.preventDefault();
-      const from=e.dataTransfer.getData("text/plain");
-      if(!from || from===section.id) return;
-      const fromIndex=state.sections.findIndex(x=>x.id===from);
-      const toIndex=state.sections.findIndex(x=>x.id===section.id);
-      const [moved]=state.sections.splice(fromIndex,1);
-      state.sections.splice(toIndex,0,moved);
-      saveLocalState(false);
-      renderBuilder();
-    });
-
-    list.appendChild(item);
-  });
-
-  document.getElementById("sectionCount").textContent=state.sections.length;
-}
-
-/* =========================
-   PREVIEW
-========================= */
-
-function renderPreview(){
-  const preview=document.getElementById("preview");
-  preview.innerHTML="";
-
-  state.sections
-    .filter(section=>section.visible)
-    .forEach(section=>{
-      const el=document.createElement("div");
-      el.className="site-section "+(section.id===selectedId ? "selected":"");
-      el.dataset.id=section.id;
-
-      el.innerHTML=`
-        <div class="section-overlay">
-          <span class="section-tag">${escapeHtml(section.type)}</span>
-        </div>
-        ${renderSectionHTML(section)}
-      `;
-
-      el.addEventListener("click",()=>{
-        selectedId=section.id;
-        renderBuilder();
-      });
-
-      preview.appendChild(el);
-    });
-}
-
-function renderSectionHTML(section){
-  if(section.type==="hero"){
-    return `
-      <div class="hero-preview"
-        style="background-image:
-        linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.2)),
-        url('${escapeAttr(section.image)}')">
-        <div class="hero-preview-content">
-          <span class="badge">${escapeHtml(section.badge)}</span>
-          <h1>${escapeHtml(section.title)}</h1>
-          <p>${escapeHtml(section.subtitle)}</p>
-          <span class="preview-btn">${escapeHtml(section.button)}</span>
-        </div>
-      </div>
-    `;
-  }
-  if(section.type==="text"){
-    return `
-      <div class="text-preview">
-        <h2>${escapeHtml(section.title)}</h2>
-        <p>${escapeHtml(section.text)}</p>
-      </div>
-    `;
-  }
-  if(section.type==="cards"){
-    return `
-      <div class="text-preview">
-        <h2>${escapeHtml(section.title)}</h2>
-        <div class="cards-preview">
-          <div class="card-preview">
-            <img src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=80">
-            <div>
-              <b>گەشتی شاخ</b>
-              <p>ئەزموونی سروشتی جیاواز</p>
-            </div>
-          </div>
-          <div class="card-preview">
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80">
-            <div>
-              <b>گەشتی سروشت</b>
-              <p>دوو ڕۆژ لەگەڵ هاوڕێکان</p>
-            </div>
-          </div>
-          <div class="card-preview">
-            <img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80">
-            <div>
-              <b>Adventure</b>
-              <p>یادەوەرییەکی جیاواز</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  if(section.type==="gallery"){
-    return `
-      <div class="text-preview">
-        <h2>${escapeHtml(section.title)}</h2>
-        <div class="cards-preview">
-          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80">
-          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=80">
-          <img style="width:100%;border-radius:14px" src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80">
-        </div>
-      </div>
-    `;
-  }
-  return "";
-}
-
-/* =========================
-   INSPECTOR
-========================= */
-
-function renderInspector(){
-  const box=document.getElementById("inspector");
-  const section=state.sections.find(x=>x.id===selectedId);
-
-  if(!section){
-    box.innerHTML=`<div class="empty">هیچ بەشێک هەڵنەبژێردراوە</div>`;
-    return;
-  }
-
-  document.getElementById("selectedLabel").textContent=section.type;
-
-  let html=`
-    <div class="form-group">
-      <label>جۆری بەش</label>
-      <select class="select" id="editType">
-        <option value="hero" ${section.type==="hero"?"selected":""}>Hero</option>
-        <option value="text" ${section.type==="text"?"selected":""}>Text</option>
-        <option value="cards" ${section.type==="cards"?"selected":""}>Cards</option>
-        <option value="gallery" ${section.type==="gallery"?"selected":""}>Gallery</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>ناونیشان</label>
-      <input class="input" id="editTitle" value="${escapeAttr(section.title || "")}">
-    </div>
-  `;
-
-  if(section.type==="hero"){
-    html+=`
-      <div class="form-group">
-        <label>Badge</label>
-        <input class="input" id="editBadge" value="${escapeAttr(section.badge || "")}">
-      </div>
-      <div class="form-group">
-        <label>Subtitle</label>
-        <textarea class="textarea" id="editSubtitle">${escapeHtml(section.subtitle || "")}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Button</label>
-        <input class="input" id="editButton" value="${escapeAttr(section.button || "")}">
-      </div>
-      <div class="form-group">
-        <label>Image URL</label>
-        <input class="input" id="editImage" value="${escapeAttr(section.image || "")}">
-      </div>
-    `;
-  }
-
-  if(section.type==="text"){
-    html+=`
-      <div class="form-group">
-        <label>دەق</label>
-        <textarea class="textarea" id="editText">${escapeHtml(section.text || "")}</textarea>
-      </div>
-    `;
-  }
-
-  html+=`
-    <div class="divider"></div>
-    <button class="btn primary" style="width:100%" id="applyEdit">✓ جێبەجێکردن</button>
-  `;
-
-  box.innerHTML=html;
-
-  document.getElementById("editType").onchange=e=>{
-    section.type=e.target.value;
-    if(section.type==="hero"){
-      section.badge=section.badge || "KURDIA ADVENTURE";
-      section.subtitle=section.subtitle || "";
-      section.button=section.button || "بینینی گەشتەکان";
-      section.image=section.image || "";
-    }
-    if(section.type==="text"){
-      section.text=section.text || "";
-    }
-    saveLocalState(false);
-    renderBuilder();
-  };
-
-  document.getElementById("applyEdit").onclick=()=>{
-    section.title=document.getElementById("editTitle").value;
-    if(section.type==="hero"){
-      section.badge=document.getElementById("editBadge").value;
-      section.subtitle=document.getElementById("editSubtitle").value;
-      section.button=document.getElementById("editButton").value;
-      section.image=document.getElementById("editImage").value;
-    }
-    if(section.type==="text"){
-      section.text=document.getElementById("editText").value;
-    }
-    saveLocalState();
-    renderBuilder();
-  };
-}
-
-/* =========================
-   ADD SECTION
-========================= */
-
-document.getElementById("addSection").onclick=()=>{
-  const id="section-"+Date.now();
-  state.sections.push({
-    id,
-    type:"text",
-    title:"بەشی نوێ",
-    text:"دەقی بەشی نوێ لێرە بنووسە.",
-    visible:true
-  });
-  selectedId=id;
-  saveLocalState(false);
-  renderBuilder();
-};
-
-/* =========================
-   DEVICE PREVIEW
-========================= */
-
-document.querySelectorAll(".device-btn").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".device-btn").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    const preview=document.getElementById("preview");
-    preview.classList.remove("tablet","mobile");
-    if(btn.dataset.device==="tablet") preview.classList.add("tablet");
-    if(btn.dataset.device==="mobile") preview.classList.add("mobile");
-  };
-});
-
-/* =========================
-   MEDIA & IMGBB UPLOAD
-========================= */
-
-function renderMedia(){
-  const grid=document.getElementById("mediaGrid");
-  grid.innerHTML="";
-
-  state.media.forEach((item,index)=>{
-    const card=document.createElement("div");
-    card.className="media-card";
-    card.innerHTML=`
-      <img src="${escapeAttr(item.url)}">
-      <div class="media-card-info">
-        <b>${escapeHtml(item.name)}</b><br>
-        <small style="cursor:pointer;color:var(--accent)" onclick="navigator.clipboard.writeText('${escapeAttr(item.url)}');toast('لینکی وێنە کۆپی کرا')">📋 کۆپیکردنی لینک</small><br><br>
-        <button class="btn danger" style="width:100%" data-index="${index}">سڕینەوە</button>
-      </div>
-    `;
-
-    card.querySelector("button").onclick=()=>{
-      state.media.splice(index,1);
-      saveLocalState(false);
-      renderMedia();
-    };
-
-    grid.appendChild(card);
-  });
-
-  document.getElementById("statMedia").textContent=state.media.length;
-}
-
-document.getElementById("uploadBtn").onclick=()=>{
-  document.getElementById("fileInput").click();
-};
-
-document.getElementById("uploadBox").onclick=()=>{
-  document.getElementById("fileInput").click();
-};
-
-document.getElementById("fileInput").onchange=async e=>{
-  const files=[...e.target.files];
-  for(const file of files){
-    if(!file.type.startsWith("image/")) continue;
-    toast(`خەریکی ئەپڵۆدی ${file.name} بۆ ImgBB...`);
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try{
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
-        method: "POST",
-        body: formData
-      });
-      const result = await res.json();
-      if(result.success){
-        state.media.push({
-          name: file.name,
-          url: result.data.url
-        });
-        saveLocalState(false);
-        renderMedia();
-        toast("وێنە لە هەور پاشەکەوت کرا ✓");
-      }else{
-        toast("هەڵە لە ئەپڵۆدی وێنە");
-      }
-    }catch(err){
-      toast("هەڵە لە پەیوەندی بە ImgBB");
-    }
+    toast("وێبسایت لە ئامێرەکە پاشەکەوت بوو (Offline)");
   }
 };
 
-/* =========================
-   AI DEMO
-========================= */
-
-function sendAI(){
-  const input=document.getElementById("aiInput");
-  const text=input.value.trim();
-  if(!text) return;
-
-  const chat=document.getElementById("aiChat");
-  chat.innerHTML+=`<div class="msg user">${escapeHtml(text)}</div>`;
-  input.value="";
-
-  let answer="فەرمانەکەت تۆمار کرا. لەم وەشانەدا AI بە شێوەی local demo کاردەکات.";
-  if(text.includes("ناونیشان") || text.includes("سەردێڕ")){
-    answer="دەتوانم ناونیشانی بەشی هەڵبژێردراو بگۆڕم. تکایە ناونیشانی نوێ بنووسە.";
-  }
-  if(text.includes("وێنە")){
-    answer="دەتوانیت لە Media Library وێنە upload بکەیت و لینکی وێنەکە ڕاستەوخۆ لە Inspector دابنێیت.";
-  }
-
-  setTimeout(()=>{
-    chat.innerHTML+=`<div class="msg ai">${escapeHtml(answer)}</div>`;
-    chat.scrollTop=chat.scrollHeight;
-  },250);
+/* HELPERS */
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.__tTimer);
+  window.__tTimer = setTimeout(()=>{ t.classList.remove("show"); }, 2400);
 }
 
-document.getElementById("aiSend").onclick=sendAI;
-document.getElementById("aiInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter") sendAI();
-});
+function escapeHtml(s){ return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+function escapeAttr(s){ return escapeHtml(s); }
 
-/* =========================
-   SAVE / PUBLISH
-========================= */
-
-document.getElementById("saveBtn").onclick=()=>{
-  saveLocalState();
-  syncToCloud();
-};
-
-document.getElementById("publishBtn").onclick=()=>{
-  saveLocalState(false);
-  syncToCloud();
-};
-
-document.getElementById("previewBtn").onclick=()=>{
-  const builder=document.querySelector('[data-page="builder"]');
-  builder.click();
-  toast("Preview ئامادەیە 👁");
-};
-
-/* =========================
-   THEME & RESET
-========================= */
-
-document.getElementById("accentColor").oninput=e=>{
-  document.documentElement.style.setProperty("--accent", e.target.value);
-};
-
-document.getElementById("resetBtn").onclick=()=>{
-  if(!confirm("دڵنیایت دەتەوێت Builder reset بکەیت؟")) return;
-  state=structuredClone(DEFAULT_STATE);
-  selectedId=state.sections[0].id;
-  saveLocalState(false);
-  renderBuilder();
-  toast("Builder reset کرا");
-};
-
-/* =========================
-   STATS & TOAST
-========================= */
-
-function updateStats(){
-  document.getElementById("statSections").textContent=state.sections.filter(x=>x.visible).length;
-  document.getElementById("statMedia").textContent=state.media.length;
-}
-
-function toast(message){
-  const el=document.getElementById("toast");
-  el.textContent=message;
-  el.classList.add("show");
-  clearTimeout(window.__toast);
-  window.__toast=setTimeout(()=>{ el.classList.remove("show"); },2500);
-}
-
-/* =========================
-   SECURITY / HELPERS
-========================= */
-
-function escapeHtml(value){
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function escapeAttr(value){
-  return escapeHtml(value);
-}
-
-/* =========================
-   INIT
-========================= */
-
-renderBuilder();
-renderMedia();
-updateStats();
-loadFromCloud();
-
+// INIT
+renderAll();
 </script>
-
 </body>
 </html>
