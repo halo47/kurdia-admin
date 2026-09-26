@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">KURDIA ADMIN</string>
+    <string name="title_activity_main">KURDIA ADMIN</string>
+    <string name="package_name">com.kurdia.adventure.admin</string>
+    <string name="custom_url_scheme">com.kurdia.adventure.admin</string>
+</resources>
